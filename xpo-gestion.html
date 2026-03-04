@@ -8,280 +8,131 @@
   <style>
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
     :root{
-      --bg:#0d0d0b;
-      --surface:#141412;
-      --surface2:#1c1c19;
-      --surface3:#242420;
-      --border:#2a2a26;
-      --border2:#333330;
-      --text:#f0f0ec;
-      --text2:#8a8a82;
-      --text3:#555550;
-      --accent:#e8320a;
-      --accent-dim:rgba(232,50,10,0.15);
-      --accent-glow:rgba(232,50,10,0.08);
-      --green:#22c55e;
-      --green-dim:rgba(34,197,94,0.12);
-      --yellow:#f59e0b;
-      --yellow-dim:rgba(245,158,11,0.12);
-      --red:#ef4444;
-      --red-dim:rgba(239,68,68,0.12);
-      --blue:#3b82f6;
-      --blue-dim:rgba(59,130,246,0.12);
+      --bg:#0d0d0b;--surface:#141412;--surface2:#1c1c19;--surface3:#242420;
+      --border:#2a2a26;--border2:#333330;
+      --text:#f0f0ec;--text2:#8a8a82;--text3:#555550;
+      --accent:#e8320a;--accent-dim:rgba(232,50,10,0.15);
+      --green:#22c55e;--green-dim:rgba(34,197,94,0.12);
+      --yellow:#f59e0b;--yellow-dim:rgba(245,158,11,0.12);
+      --red:#ef4444;--red-dim:rgba(239,68,68,0.12);
+      --blue:#3b82f6;--blue-dim:rgba(59,130,246,0.12);
+      --purple:#a855f7;--purple-dim:rgba(168,85,247,0.12);
     }
     html{scroll-behavior:smooth;}
     body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
-
-    /* SCROLLBAR */
     ::-webkit-scrollbar{width:4px;}
     ::-webkit-scrollbar-track{background:var(--bg);}
     ::-webkit-scrollbar-thumb{background:var(--accent);}
 
-    /* LOCK SCREEN */
-    #lockScreen{
-      position:fixed;inset:0;z-index:1000;
-      background:var(--bg);
-      display:flex;align-items:center;justify-content:center;
-      flex-direction:column;gap:0;
-    }
-    .lock-logo{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:900;font-size:5rem;letter-spacing:0.08em;
-      color:var(--text);margin-bottom:8px;
-      animation:pulseIn 1s ease forwards;
-    }
+    /* LOCK */
+    #lockScreen{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;}
+    .lock-logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:5rem;letter-spacing:0.08em;color:var(--text);margin-bottom:8px;animation:fadeUp 0.8s ease forwards;}
     .lock-logo span{color:var(--accent);}
-    .lock-sub{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:600;font-size:0.75rem;letter-spacing:0.28em;
-      text-transform:uppercase;color:var(--text3);
-      margin-bottom:52px;
-      animation:pulseIn 1s 0.2s ease both;
-    }
-    .lock-box{
-      background:var(--surface);
-      border:1px solid var(--border);
-      padding:40px 48px;
-      width:380px;
-      animation:pulseIn 1s 0.4s ease both;
-    }
-    .lock-title{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:700;font-size:0.72rem;letter-spacing:0.22em;
-      text-transform:uppercase;color:var(--text2);
-      margin-bottom:24px;
-      display:flex;align-items:center;gap:10px;
-    }
+    .lock-sub{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.75rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--text3);margin-bottom:52px;animation:fadeUp 0.8s 0.15s ease both;}
+    .lock-box{background:var(--surface);border:1px solid var(--border);padding:40px 48px;width:380px;animation:fadeUp 0.8s 0.3s ease both;}
+    .lock-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--text2);margin-bottom:24px;display:flex;align-items:center;gap:10px;}
     .lock-title::before{content:'';width:16px;height:2px;background:var(--accent);}
-    .lock-input-wrap{position:relative;margin-bottom:16px;}
-    .lock-input{
-      width:100%;background:var(--surface2);
-      border:1px solid var(--border);
-      color:var(--text);
-      font-family:'Barlow',sans-serif;font-size:1rem;
-      padding:14px 16px;
-      outline:none;transition:border-color 0.2s;
-      letter-spacing:0.1em;
-    }
+    .lock-input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Barlow',sans-serif;font-size:1rem;padding:14px 16px;outline:none;transition:border-color 0.2s;margin-bottom:16px;letter-spacing:0.1em;}
     .lock-input:focus{border-color:var(--accent);}
-    .lock-btn{
-      width:100%;
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:700;font-size:0.85rem;letter-spacing:0.16em;
-      text-transform:uppercase;
-      padding:14px;background:var(--accent);color:white;
-      border:none;cursor:pointer;
-      transition:background 0.2s,transform 0.15s;
-    }
-    .lock-btn:hover{background:#c42a08;transform:translateY(-1px);}
-    .lock-error{
-      font-size:0.8rem;color:var(--red);
-      margin-top:12px;text-align:center;
-      opacity:0;transition:opacity 0.3s;
-    }
+    .lock-btn{width:100%;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.16em;text-transform:uppercase;padding:14px;background:var(--accent);color:white;border:none;cursor:pointer;transition:background 0.2s;}
+    .lock-btn:hover{background:#c42a08;}
+    .lock-error{font-size:0.8rem;color:var(--red);margin-top:12px;text-align:center;opacity:0;transition:opacity 0.3s;}
     .lock-error.show{opacity:1;}
 
-    /* MAIN APP */
+    /* APP */
     #app{display:none;}
 
-    /* TOP BAR */
-    .topbar{
-      position:fixed;top:0;left:0;right:0;z-index:100;
-      height:60px;
-      background:var(--surface);
-      border-bottom:1px solid var(--border);
-      display:flex;align-items:center;justify-content:space-between;
-      padding:0 28px;
-    }
-    .topbar-logo{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:900;font-size:1.5rem;letter-spacing:0.1em;
-      color:var(--text);
-    }
+    /* TOPBAR */
+    .topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px;}
+    .topbar-logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.5rem;letter-spacing:0.1em;}
     .topbar-logo span{color:var(--accent);}
+    .topbar-sub{font-size:0.75rem;font-weight:400;color:var(--text3);letter-spacing:0.1em;margin-left:10px;}
     .topbar-right{display:flex;align-items:center;gap:20px;}
-    .topbar-time{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:600;font-size:0.85rem;letter-spacing:0.1em;
-      color:var(--text2);
-    }
-    .topbar-user{
-      display:flex;align-items:center;gap:8px;
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:700;font-size:0.8rem;letter-spacing:0.14em;
-      text-transform:uppercase;color:var(--accent);
-    }
+    .topbar-time{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.85rem;letter-spacing:0.1em;color:var(--text2);}
     .online-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:blink 2s infinite;}
-    .logout-btn{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:600;font-size:0.72rem;letter-spacing:0.14em;
-      text-transform:uppercase;
-      padding:6px 14px;
-      background:transparent;color:var(--text3);
-      border:1px solid var(--border);cursor:pointer;
-      transition:color 0.2s,border-color 0.2s;
-    }
+    .topbar-user{display:flex;align-items:center;gap:8px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.8rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);}
+    .logout-btn{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;padding:6px 14px;background:transparent;color:var(--text3);border:1px solid var(--border);cursor:pointer;transition:color 0.2s,border-color 0.2s;}
     .logout-btn:hover{color:var(--red);border-color:var(--red);}
 
-    /* SIDEBAR */
+    /* LAYOUT */
     .layout{display:flex;padding-top:60px;min-height:100vh;}
-    .sidebar{
-      width:220px;flex-shrink:0;
-      background:var(--surface);
-      border-right:1px solid var(--border);
-      padding:24px 0;
-      position:fixed;top:60px;bottom:0;
-      overflow-y:auto;
-    }
-    .sidebar-section{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:600;font-size:0.62rem;letter-spacing:0.24em;
-      text-transform:uppercase;color:var(--text3);
-      padding:0 20px;margin:20px 0 8px;
-    }
-    .sidebar-link{
-      display:flex;align-items:center;gap:12px;
-      padding:10px 20px;
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:600;font-size:0.85rem;letter-spacing:0.08em;
-      text-transform:uppercase;color:var(--text2);
-      cursor:pointer;transition:color 0.2s,background 0.2s;
-      border-left:2px solid transparent;
-    }
+    .sidebar{width:230px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);padding:24px 0;position:fixed;top:60px;bottom:0;overflow-y:auto;}
+    .sidebar-section{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.62rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--text3);padding:0 20px;margin:20px 0 8px;}
+    .sidebar-link{display:flex;align-items:center;gap:12px;padding:11px 20px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text2);cursor:pointer;transition:color 0.2s,background 0.2s;border-left:2px solid transparent;}
     .sidebar-link:hover{color:var(--text);background:var(--surface2);}
     .sidebar-link.active{color:var(--accent);border-left-color:var(--accent);background:var(--accent-dim);}
     .sidebar-link svg{width:16px;height:16px;flex-shrink:0;}
+    .sidebar-badge{margin-left:auto;font-size:0.65rem;background:var(--accent-dim);color:var(--accent);padding:2px 7px;border-radius:2px;font-family:'Barlow Condensed',sans-serif;font-weight:700;}
+    .sidebar-badge.yellow{background:var(--yellow-dim);color:var(--yellow);}
 
-    /* MAIN */
-    .main{margin-left:220px;padding:32px;flex:1;}
-
-    /* PAGES */
+    .main{margin-left:230px;padding:32px;flex:1;min-width:0;}
     .page{display:none;}
-    .page.active{display:block;}
+    .page.active{display:block;animation:fadeUp 0.35s ease;}
 
     /* PAGE HEADER */
-    .page-header{margin-bottom:32px;}
-    .page-label{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:600;font-size:0.7rem;letter-spacing:0.22em;
-      text-transform:uppercase;color:var(--accent);
-      margin-bottom:8px;
-      display:flex;align-items:center;gap:8px;
-    }
+    .page-header{margin-bottom:32px;display:flex;align-items:flex-end;justify-content:space-between;}
+    .page-header-left{}
+    .page-label{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.7rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
     .page-label::before{content:'';width:16px;height:2px;background:var(--accent);}
-    .page-title{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:900;font-size:2.4rem;
-      text-transform:uppercase;letter-spacing:0.02em;
-      color:var(--text);
-    }
+    .page-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:2.4rem;text-transform:uppercase;letter-spacing:0.02em;color:var(--text);}
 
-    /* STAT CARDS */
-    .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px;}
-    .stat-card{
-      background:var(--surface);border:1px solid var(--border);
-      padding:22px 24px;
-      transition:border-color 0.2s;
-    }
+    /* STAT GRID */
+    .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
+    .stat-card{background:var(--surface);border:1px solid var(--border);padding:22px 24px;transition:border-color 0.2s;}
     .stat-card:hover{border-color:var(--border2);}
-    .stat-card-label{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:600;font-size:0.68rem;letter-spacing:0.18em;
-      text-transform:uppercase;color:var(--text3);margin-bottom:10px;
-    }
-    .stat-card-val{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:900;font-size:2.2rem;line-height:1;
-      color:var(--text);
-    }
+    .stat-card-label{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;}
+    .stat-card-val{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:2.2rem;line-height:1;color:var(--text);}
+    .stat-card-val.green{color:var(--green);}
+    .stat-card-val.yellow{color:var(--yellow);}
+    .stat-card-val.red{color:var(--red);}
     .stat-card-val span{color:var(--accent);}
     .stat-card-sub{font-size:0.75rem;color:var(--text3);margin-top:6px;}
 
-    /* TABLE */
-    .table-wrap{background:var(--surface);border:1px solid var(--border);overflow:hidden;}
-    .table-header{
-      padding:18px 24px;
-      border-bottom:1px solid var(--border);
-      display:flex;align-items:center;justify-content:space-between;
-    }
-    .table-title{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:800;font-size:1rem;letter-spacing:0.08em;
-      text-transform:uppercase;color:var(--text);
-    }
-    .table-actions{display:flex;gap:10px;}
-    .btn{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:700;font-size:0.72rem;letter-spacing:0.14em;
-      text-transform:uppercase;
-      padding:8px 18px;cursor:pointer;
-      border:none;transition:background 0.2s,transform 0.15s;
-    }
+    /* CARDS & TABLES */
+    .card{background:var(--surface);border:1px solid var(--border);overflow:hidden;margin-bottom:20px;}
+    .card-header{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;}
+    .card-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);}
+    .card-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+    table{width:100%;border-collapse:collapse;}
+    thead tr{border-bottom:1px solid var(--border);}
+    th{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.63rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);padding:12px 20px;text-align:left;white-space:nowrap;}
+    tbody tr{border-bottom:1px solid var(--border);transition:background 0.15s;}
+    tbody tr:hover{background:var(--surface2);}
+    tbody tr:last-child{border-bottom:none;}
+    td{padding:13px 20px;font-size:0.87rem;color:var(--text2);vertical-align:middle;}
+    td:first-child{color:var(--text);}
+
+    /* BUTTONS */
+    .btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;padding:8px 16px;cursor:pointer;border:none;transition:background 0.2s,transform 0.15s,opacity 0.2s;white-space:nowrap;}
     .btn:hover{transform:translateY(-1px);}
-    .btn-red{background:var(--accent);color:white;}
-    .btn-red:hover{background:#c42a08;}
+    .btn-accent{background:var(--accent);color:white;}
+    .btn-accent:hover{background:#c42a08;}
     .btn-outline{background:transparent;color:var(--text2);border:1px solid var(--border);}
     .btn-outline:hover{color:var(--text);border-color:var(--border2);}
     .btn-green{background:var(--green);color:#000;}
     .btn-green:hover{background:#16a34a;}
+    .btn-yellow{background:var(--yellow);color:#000;}
+    .btn-yellow:hover{background:#d97706;}
+    .btn-red{background:var(--red);color:white;}
+    .btn-red:hover{background:#dc2626;}
+    .btn-sm{padding:5px 10px;font-size:0.65rem;}
 
-    .search-input{
-      background:var(--surface2);border:1px solid var(--border);
-      color:var(--text);font-family:'Barlow',sans-serif;font-size:0.85rem;
-      padding:8px 14px;outline:none;width:220px;
-      transition:border-color 0.2s;
-    }
-    .search-input:focus{border-color:var(--accent);}
-    .search-input::placeholder{color:var(--text3);}
-
-    table{width:100%;border-collapse:collapse;}
-    thead tr{border-bottom:1px solid var(--border);}
-    th{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:600;font-size:0.65rem;letter-spacing:0.18em;
-      text-transform:uppercase;color:var(--text3);
-      padding:12px 24px;text-align:left;
-    }
-    tbody tr{border-bottom:1px solid var(--border);transition:background 0.15s;}
-    tbody tr:hover{background:var(--surface2);}
-    tbody tr:last-child{border-bottom:none;}
-    td{padding:14px 24px;font-size:0.88rem;color:var(--text2);}
-    td:first-child{color:var(--text);font-weight:500;}
+    /* INLINE ACTION BTNS */
+    .act{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;padding:4px 9px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2);transition:all 0.2s;}
+    .act:hover{border-color:var(--accent);color:var(--accent);}
+    .act.red:hover{border-color:var(--red);color:var(--red);}
+    .act.green:hover{border-color:var(--green);color:var(--green);}
+    .act.yellow:hover{border-color:var(--yellow);color:var(--yellow);}
 
     /* BADGES */
-    .badge{
-      display:inline-block;
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:700;font-size:0.62rem;letter-spacing:0.14em;
-      text-transform:uppercase;
-      padding:4px 10px;
-      border-radius:2px;
-    }
-    .badge-online{background:var(--green-dim);color:var(--green);}
-    .badge-offline{background:var(--surface3);color:var(--text3);}
-    .badge-service{background:var(--accent-dim);color:var(--accent);}
-
-    /* GRADE BADGES */
+    .badge{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;padding:3px 9px;border-radius:2px;white-space:nowrap;}
+    .b-green{background:var(--green-dim);color:var(--green);}
+    .b-red{background:var(--red-dim);color:var(--red);}
+    .b-yellow{background:var(--yellow-dim);color:var(--yellow);}
+    .b-blue{background:var(--blue-dim);color:var(--blue);}
+    .b-purple{background:var(--purple-dim);color:var(--purple);}
+    .b-gray{background:var(--surface3);color:var(--text3);}
+    .b-accent{background:var(--accent-dim);color:var(--accent);}
     .grade-0{background:rgba(100,100,100,0.15);color:#888;}
     .grade-1{background:rgba(100,180,100,0.15);color:#6eb86e;}
     .grade-2{background:rgba(100,150,220,0.15);color:#6ea8e0;}
@@ -293,182 +144,131 @@
     .grade-8{background:rgba(220,150,50,0.15);color:#dc9632;}
     .grade-9{background:rgba(232,50,10,0.25);color:var(--accent);}
 
-    /* ACTION BTNS in table */
-    .action-btns{display:flex;gap:8px;}
-    .action-btn{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:700;font-size:0.62rem;letter-spacing:0.1em;
-      text-transform:uppercase;
-      padding:5px 10px;cursor:pointer;
-      border:1px solid var(--border);
-      background:transparent;color:var(--text2);
-      transition:all 0.2s;
-    }
-    .action-btn:hover{border-color:var(--accent);color:var(--accent);}
-    .action-btn.del:hover{border-color:var(--red);color:var(--red);}
-    .action-btn.promote:hover{border-color:var(--green);color:var(--green);}
+    /* FORMS */
+    .form-row{margin-bottom:16px;}
+    .form-label{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:7px;}
+    .form-input,.form-select,.form-textarea{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Barlow',sans-serif;font-size:0.9rem;padding:11px 14px;outline:none;transition:border-color 0.2s;}
+    .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent);}
+    .form-select option{background:var(--surface2);}
+    .form-textarea{resize:vertical;min-height:80px;}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    .form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+    .search-input{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Barlow',sans-serif;font-size:0.85rem;padding:8px 14px;outline:none;width:200px;transition:border-color 0.2s;}
+    .search-input:focus{border-color:var(--accent);}
+    .search-input::placeholder{color:var(--text3);}
 
     /* MODAL */
-    .modal-overlay{
-      position:fixed;inset:0;z-index:500;
-      background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);
-      display:none;align-items:center;justify-content:center;
-    }
+    .modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px;}
     .modal-overlay.open{display:flex;}
-    .modal{
-      background:var(--surface);
-      border:1px solid var(--border);
-      padding:40px;width:520px;max-width:95vw;
-      animation:pulseIn 0.3s ease;
-    }
-    .modal-title{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:900;font-size:1.5rem;letter-spacing:0.05em;
-      text-transform:uppercase;color:var(--text);
-      margin-bottom:28px;
-      display:flex;align-items:center;gap:10px;
-    }
+    .modal{background:var(--surface);border:1px solid var(--border);padding:36px;width:560px;max-width:100%;max-height:90vh;overflow-y:auto;animation:fadeUp 0.3s ease;}
+    .modal-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.5rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--text);margin-bottom:28px;display:flex;align-items:center;gap:10px;}
     .modal-title::before{content:'';width:16px;height:2px;background:var(--accent);}
-    .form-row{margin-bottom:18px;}
-    .form-label{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:600;font-size:0.68rem;letter-spacing:0.18em;
-      text-transform:uppercase;color:var(--text3);
-      display:block;margin-bottom:8px;
-    }
-    .form-input,.form-select{
-      width:100%;background:var(--surface2);
-      border:1px solid var(--border);color:var(--text);
-      font-family:'Barlow',sans-serif;font-size:0.9rem;
-      padding:11px 14px;outline:none;
-      transition:border-color 0.2s;
-    }
-    .form-input:focus,.form-select:focus{border-color:var(--accent);}
-    .form-select option{background:var(--surface2);}
-    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-    .modal-actions{display:flex;gap:10px;margin-top:28px;justify-content:flex-end;}
+    .modal-actions{display:flex;gap:10px;margin-top:24px;justify-content:flex-end;}
 
-    /* SERVICE PAGE */
-    .service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;}
-    .service-info-card{
-      background:var(--surface);border:1px solid var(--border);
-      padding:24px;
-    }
-    .sic-label{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:600;font-size:0.65rem;letter-spacing:0.2em;
-      text-transform:uppercase;color:var(--text3);margin-bottom:10px;
-    }
-    .sic-val{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:900;font-size:1.6rem;color:var(--text);
-    }
-    .sic-val.active{color:var(--green);}
+    /* PROFILE MODAL */
+    .profile-header{display:flex;align-items:center;gap:20px;margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);}
+    .profile-avatar{width:64px;height:64px;background:var(--accent-dim);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.8rem;color:var(--accent);flex-shrink:0;}
+    .profile-name{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.4rem;text-transform:uppercase;color:var(--text);}
+    .profile-id{font-size:0.8rem;color:var(--text3);margin-top:3px;}
+    .profile-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:24px;}
+    .ptab{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;padding:10px 18px;cursor:pointer;color:var(--text3);border-bottom:2px solid transparent;transition:color 0.2s,border-color 0.2s;}
+    .ptab.active{color:var(--accent);border-bottom-color:var(--accent);}
+    .ptab-content{display:none;}
+    .ptab-content.active{display:block;}
 
-    .service-form{
-      background:var(--surface);border:1px solid var(--border);
-      padding:32px;margin-bottom:24px;
-    }
-    .service-form-title{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:800;font-size:1.1rem;letter-spacing:0.08em;
-      text-transform:uppercase;color:var(--text);
-      margin-bottom:24px;
-      display:flex;align-items:center;gap:10px;
-    }
-    .service-form-title::before{content:'';width:14px;height:2px;background:var(--accent);}
+    /* MINI CHART */
+    .mini-chart{display:flex;align-items:flex-end;gap:4px;height:60px;margin:12px 0;}
+    .mini-bar{flex:1;background:var(--accent-dim);border-top:2px solid var(--accent);transition:height 0.4s ease;min-height:4px;position:relative;}
+    .mini-bar:hover{background:var(--accent-dim);opacity:0.8;}
 
-    /* HIERARCHY PAGE */
-    .hierarchy{display:flex;flex-direction:column;gap:4px;}
-    .hier-row{
-      display:flex;align-items:center;
-      background:var(--surface);border:1px solid var(--border);
-      padding:16px 24px;gap:20px;
-      transition:border-color 0.2s;
-    }
+    /* SANCTION ITEM */
+    .sanction-item{padding:14px;background:var(--surface2);border:1px solid var(--border);margin-bottom:8px;display:flex;align-items:flex-start;gap:12px;}
+    .sanction-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;}
+    .si-warn{background:var(--yellow-dim);color:var(--yellow);}
+    .si-bl{background:var(--red-dim);color:var(--red);}
+    .si-note{background:var(--blue-dim);color:var(--blue);}
+    .sanction-body{flex:1;}
+    .sanction-type{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;}
+    .sanction-reason{font-size:0.83rem;color:var(--text2);}
+    .sanction-date{font-size:0.72rem;color:var(--text3);margin-top:3px;}
+
+    /* CONGE ITEM */
+    .conge-item{padding:14px 20px;display:flex;align-items:center;gap:16px;border-bottom:1px solid var(--border);}
+    .conge-item:last-child{border-bottom:none;}
+
+    /* SERVICE SECTION */
+    .service-form-wrap{background:var(--surface);border:1px solid var(--border);padding:28px;margin-bottom:20px;}
+    .sfwt{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+    .sfwt::before{content:'';width:14px;height:2px;background:var(--accent);}
+
+    /* HIERARCHY */
+    .hier-row{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);padding:16px 24px;gap:20px;margin-bottom:4px;transition:border-color 0.2s;}
     .hier-row:hover{border-color:var(--border2);}
-    .hier-rank{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:900;font-size:1.6rem;
-      color:var(--text3);width:40px;text-align:center;flex-shrink:0;
-    }
+    .hier-rank{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.6rem;color:var(--text3);width:40px;text-align:center;flex-shrink:0;}
     .hier-info{flex:1;}
-    .hier-name{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:800;font-size:1rem;text-transform:uppercase;
-      letter-spacing:0.06em;color:var(--text);margin-bottom:4px;
-    }
+    .hier-name{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text);margin-bottom:4px;}
     .hier-desc{font-size:0.8rem;color:var(--text3);}
-    .hier-perms{display:flex;gap:6px;flex-wrap:wrap;}
-    .perm-tag{
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:600;font-size:0.6rem;letter-spacing:0.12em;
-      text-transform:uppercase;padding:3px 8px;
-      background:var(--surface2);color:var(--text3);border:1px solid var(--border);
-    }
+    .hier-salary{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;color:var(--green);white-space:nowrap;}
+    .perm-tag{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;padding:3px 8px;background:var(--surface2);color:var(--text3);border:1px solid var(--border);}
     .perm-tag.yes{background:var(--green-dim);color:var(--green);border-color:rgba(34,197,94,0.2);}
 
-    /* LOG PAGE */
-    .log-entry{
-      display:flex;align-items:flex-start;gap:16px;
-      padding:16px 24px;background:var(--surface);border-bottom:1px solid var(--border);
-    }
-    .log-dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0;}
+    /* SALARY SECTION */
+    .salary-card{background:var(--surface);border:1px solid var(--border);padding:24px;margin-bottom:12px;}
+    .salary-name{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;text-transform:uppercase;color:var(--text);margin-bottom:4px;}
+    .salary-grade{font-size:0.78rem;color:var(--text3);margin-bottom:14px;}
+    .salary-bar-wrap{background:var(--surface2);height:8px;width:100%;margin-bottom:8px;}
+    .salary-bar{height:8px;background:linear-gradient(90deg,var(--accent),var(--yellow));transition:width 0.6s ease;}
+    .salary-nums{display:flex;justify-content:space-between;font-size:0.78rem;color:var(--text3);}
+    .salary-total{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.8rem;color:var(--green);margin-top:8px;}
+
+    /* LOG */
+    .log-entry{display:flex;align-items:flex-start;gap:14px;padding:14px 20px;border-bottom:1px solid var(--border);}
+    .log-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0;}
     .log-dot.in{background:var(--green);}
     .log-dot.out{background:var(--red);}
     .log-dot.edit{background:var(--yellow);}
     .log-dot.add{background:var(--blue);}
-    .log-main{flex:1;}
+    .log-dot.sanction{background:var(--purple);}
     .log-text{font-size:0.87rem;color:var(--text);}
     .log-text strong{color:var(--accent);}
-    .log-time{font-size:0.75rem;color:var(--text3);margin-top:3px;}
-
-    /* ANIMATIONS */
-    @keyframes pulseIn{
-      from{opacity:0;transform:translateY(16px);}
-      to{opacity:1;transform:none;}
-    }
-    @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+    .log-time{font-size:0.73rem;color:var(--text3);margin-top:3px;}
 
     /* TOAST */
-    .toast{
-      position:fixed;bottom:28px;right:28px;z-index:2000;
-      background:var(--surface);border:1px solid var(--border);
-      border-left:3px solid var(--green);
-      padding:14px 20px;
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:600;font-size:0.85rem;letter-spacing:0.06em;
-      text-transform:uppercase;color:var(--text);
-      transform:translateX(120%);transition:transform 0.4s ease;
-    }
+    .toast{position:fixed;bottom:28px;right:28px;z-index:2000;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--green);padding:14px 20px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.85rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--text);transform:translateX(140%);transition:transform 0.4s ease;}
     .toast.show{transform:translateX(0);}
     .toast.error{border-left-color:var(--red);}
+    .toast.warn{border-left-color:var(--yellow);}
 
-    /* EMPTY STATE */
-    .empty{
-      text-align:center;padding:60px;color:var(--text3);
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:1rem;letter-spacing:0.1em;text-transform:uppercase;
-    }
+    /* EMPTY */
+    .empty{text-align:center;padding:48px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-size:0.95rem;letter-spacing:0.1em;text-transform:uppercase;}
 
     /* CONFIRM */
-    .confirm-modal .modal{width:400px;text-align:center;}
+    .confirm-modal .modal{width:380px;text-align:center;}
     .confirm-modal .modal-title{justify-content:center;}
     .confirm-modal .modal-title::before{display:none;}
-    .confirm-text{color:var(--text2);font-size:0.9rem;margin-bottom:24px;line-height:1.6;}
+    .confirm-text{color:var(--text2);font-size:0.9rem;margin-bottom:4px;line-height:1.65;}
+    .modal-actions.centered{justify-content:center;}
+
+    /* ANIMATIONS */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+    @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+    /* RESPONSIVE TWEAKS */
+    @media(max-width:900px){
+      .stat-grid{grid-template-columns:1fr 1fr;}
+      .form-grid,.form-grid-3{grid-template-columns:1fr;}
+    }
   </style>
 </head>
 <body>
 
-<!-- LOCK SCREEN -->
+<!-- LOCK -->
 <div id="lockScreen">
   <div class="lock-logo">X<span>P</span>O</div>
   <div class="lock-sub">Système de gestion interne</div>
   <div class="lock-box">
     <div class="lock-title">Accès sécurisé</div>
-    <div class="lock-input-wrap">
-      <input type="password" class="lock-input" id="passwordInput" placeholder="Mot de passe..." onkeydown="if(event.key==='Enter')tryLogin()"/>
-    </div>
+    <input type="password" class="lock-input" id="passwordInput" placeholder="Mot de passe..." onkeydown="if(event.key==='Enter')tryLogin()"/>
     <button class="lock-btn" onclick="tryLogin()">Accéder au panneau</button>
     <div class="lock-error" id="lockError">Mot de passe incorrect.</div>
   </div>
@@ -476,9 +276,11 @@
 
 <!-- APP -->
 <div id="app">
-  <!-- TOP BAR -->
   <div class="topbar">
-    <div class="topbar-logo">X<span>P</span>O <span style="font-size:0.8rem;font-weight:400;color:var(--text3);letter-spacing:0.1em;"> — GESTION INTERNE</span></div>
+    <div style="display:flex;align-items:center;">
+      <div class="topbar-logo">X<span>P</span>O</div>
+      <span class="topbar-sub">— GESTION INTERNE</span>
+    </div>
     <div class="topbar-right">
       <div class="topbar-time" id="clock"></div>
       <div class="topbar-user"><div class="online-dot"></div> PDG / CEO</div>
@@ -487,7 +289,6 @@
   </div>
 
   <div class="layout">
-    <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="sidebar-section">Principal</div>
       <div class="sidebar-link active" onclick="showPage('dashboard',this)">
@@ -495,12 +296,27 @@
         Tableau de bord
       </div>
       <div class="sidebar-link" onclick="showPage('employees',this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Employés
       </div>
       <div class="sidebar-link" onclick="showPage('service',this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         Prise de service
+      </div>
+      <div class="sidebar-section">RH</div>
+      <div class="sidebar-link" onclick="showPage('sanctions',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Sanctions
+        <span class="sidebar-badge" id="sanctBadge" style="display:none"></span>
+      </div>
+      <div class="sidebar-link" onclick="showPage('conges',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Congés / Absences
+        <span class="sidebar-badge yellow" id="congeBadge" style="display:none"></span>
+      </div>
+      <div class="sidebar-link" onclick="showPage('salaires',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Salaires
       </div>
       <div class="sidebar-section">Organisation</div>
       <div class="sidebar-link" onclick="showPage('hierarchy',this)">
@@ -509,257 +325,317 @@
       </div>
       <div class="sidebar-link" onclick="showPage('logs',this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        Journal d'activité
+        Journal
       </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="main">
 
       <!-- DASHBOARD -->
       <div class="page active" id="page-dashboard">
-        <div class="page-header">
-          <div class="page-label">Vue générale</div>
-          <div class="page-title">Tableau de bord</div>
-        </div>
+        <div class="page-header"><div class="page-header-left"><div class="page-label">Vue générale</div><div class="page-title">Tableau de bord</div></div></div>
         <div class="stat-grid">
-          <div class="stat-card">
-            <div class="stat-card-label">Employés total</div>
-            <div class="stat-card-val" id="stat-total">0</div>
-            <div class="stat-card-sub">Membres enregistrés</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-label">En service</div>
-            <div class="stat-card-val" id="stat-online" style="color:var(--green)">0</div>
-            <div class="stat-card-sub">Actuellement actifs</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-label">Missions aujourd'hui</div>
-            <div class="stat-card-val" id="stat-missions">0</div>
-            <div class="stat-card-sub">Total cumulé</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-label">Taux de présence</div>
-            <div class="stat-card-val" id="stat-rate">0<span>%</span></div>
-            <div class="stat-card-sub">Employés en service</div>
-          </div>
+          <div class="stat-card"><div class="stat-card-label">Employés total</div><div class="stat-card-val" id="st-total">0</div><div class="stat-card-sub">Membres enregistrés</div></div>
+          <div class="stat-card"><div class="stat-card-label">En service</div><div class="stat-card-val green" id="st-online">0</div><div class="stat-card-sub">Actuellement actifs</div></div>
+          <div class="stat-card"><div class="stat-card-label">Sanctions actives</div><div class="stat-card-val red" id="st-sanctions">0</div><div class="stat-card-sub">Avertissements / Blâmes</div></div>
+          <div class="stat-card"><div class="stat-card-label">Congés en attente</div><div class="stat-card-val yellow" id="st-conges">0</div><div class="stat-card-sub">Demandes à traiter</div></div>
         </div>
-
-        <div class="table-wrap">
-          <div class="table-header">
-            <div class="table-title">Employés en service</div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Employés en service</div></div>
+          <table><thead><tr><th>Nom</th><th>Grade</th><th>Véhicule</th><th>Zone</th><th>Missions</th><th>Début</th><th>Durée</th></tr></thead>
+          <tbody id="dash-service"></tbody></table>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Dernières sanctions</div></div>
+            <div id="dash-sanctions"></div>
           </div>
-          <table>
-            <thead><tr>
-              <th>Nom</th><th>Grade</th><th>Véhicule</th><th>Zone</th><th>Missions</th><th>Heure début</th>
-            </tr></thead>
-            <tbody id="dashServiceList"></tbody>
-          </table>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Congés en attente</div></div>
+            <div id="dash-conges"></div>
+          </div>
         </div>
       </div>
 
       <!-- EMPLOYEES -->
       <div class="page" id="page-employees">
         <div class="page-header">
-          <div class="page-label">Ressources humaines</div>
-          <div class="page-title">Gestion des employés</div>
+          <div class="page-header-left"><div class="page-label">Ressources humaines</div><div class="page-title">Gestion des employés</div></div>
+          <button class="btn btn-accent" onclick="openAddModal()">+ Ajouter un employé</button>
         </div>
-        <div class="table-wrap">
-          <div class="table-header">
-            <div class="table-title">Liste du personnel</div>
-            <div class="table-actions">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Personnel XPO</div>
+            <div class="card-actions">
               <input type="text" class="search-input" placeholder="Rechercher..." oninput="filterEmployees(this.value)"/>
-              <button class="btn btn-red" onclick="openAddModal()">+ Ajouter</button>
+              <select class="form-select" style="width:180px;padding:8px 12px;" onchange="filterByGrade(this.value)">
+                <option value="">Tous les grades</option>
+              </select>
             </div>
           </div>
           <table>
-            <thead><tr>
-              <th>Nom</th><th>Grade</th><th>Statut</th><th>Missions</th><th>Embauché le</th><th>Actions</th>
-            </tr></thead>
-            <tbody id="employeeList"></tbody>
+            <thead><tr><th>Nom / ID</th><th>Grade</th><th>Statut</th><th>Missions</th><th>Sanctions</th><th>Salaire/mission</th><th>Embauché</th><th>Actions</th></tr></thead>
+            <tbody id="emp-list"></tbody>
           </table>
         </div>
       </div>
 
       <!-- SERVICE -->
       <div class="page" id="page-service">
-        <div class="page-header">
-          <div class="page-label">Opérations</div>
-          <div class="page-title">Prise de service</div>
+        <div class="page-header"><div class="page-header-left"><div class="page-label">Opérations</div><div class="page-title">Prise de service</div></div></div>
+        <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);">
+          <div class="stat-card"><div class="stat-card-label">En service</div><div class="stat-card-val green" id="svc-count">0</div></div>
+          <div class="stat-card"><div class="stat-card-label">Missions cumulées</div><div class="stat-card-val" id="svc-missions">0</div></div>
+          <div class="stat-card"><div class="stat-card-label">Heure système</div><div class="stat-card-val" id="svc-clock" style="font-size:1.5rem;">--:--</div></div>
         </div>
-        <div class="service-grid">
-          <div class="service-info-card">
-            <div class="sic-label">En service actuellement</div>
-            <div class="sic-val active" id="svc-count">0</div>
-          </div>
-          <div class="service-info-card">
-            <div class="sic-label">Missions du jour</div>
-            <div class="sic-val" id="svc-missions">0</div>
-          </div>
-          <div class="service-info-card">
-            <div class="sic-label">Heure système</div>
-            <div class="sic-val" id="svc-clock">--:--</div>
-          </div>
-        </div>
-
-        <div class="service-form">
-          <div class="service-form-title">Enregistrer une prise de service</div>
+        <div class="service-form-wrap">
+          <div class="sfwt">Enregistrer une prise de service</div>
           <div class="form-grid">
-            <div class="form-row">
-              <label class="form-label">Employé</label>
-              <select class="form-select" id="svcEmployee"></select>
-            </div>
-            <div class="form-row">
-              <label class="form-label">Véhicule assigné</label>
-              <input type="text" class="form-input" id="svcVehicle" placeholder="Ex: Freighter, Mule..."/>
-            </div>
-            <div class="form-row">
-              <label class="form-label">Zone de travail</label>
-              <input type="text" class="form-input" id="svcZone" placeholder="Ex: Port, Autoroute N1..."/>
-            </div>
-            <div class="form-row">
-              <label class="form-label">Nombre de missions</label>
-              <input type="number" class="form-input" id="svcMissions" placeholder="0" min="0"/>
-            </div>
+            <div class="form-row"><label class="form-label">Employé</label><select class="form-select" id="svcEmployee"></select></div>
+            <div class="form-row"><label class="form-label">Véhicule assigné</label><input type="text" class="form-input" id="svcVehicle" placeholder="Ex: Freighter, Mule..."/></div>
+            <div class="form-row"><label class="form-label">Zone de travail</label><input type="text" class="form-input" id="svcZone" placeholder="Ex: Port, Autoroute N1..."/></div>
+            <div class="form-row"><label class="form-label">Missions effectuées</label><input type="number" class="form-input" id="svcMissions" placeholder="0" min="0"/></div>
           </div>
           <div style="display:flex;gap:10px;margin-top:8px;">
             <button class="btn btn-green" onclick="takeService()">✓ Prise de service</button>
             <button class="btn btn-outline" onclick="endService()">✕ Fin de service</button>
+            <button class="btn btn-yellow" onclick="updateServiceMissions()">↑ Maj missions</button>
           </div>
         </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Employés actuellement en service</div></div>
+          <table><thead><tr><th>Employé</th><th>Grade</th><th>Véhicule</th><th>Zone</th><th>Missions</th><th>Début</th><th>Durée</th><th>Salaire estimé</th></tr></thead>
+          <tbody id="svc-list"></tbody></table>
+        </div>
+      </div>
 
-        <div class="table-wrap">
-          <div class="table-header">
-            <div class="table-title">Employés en service</div>
-          </div>
-          <table>
-            <thead><tr>
-              <th>Employé</th><th>Grade</th><th>Véhicule</th><th>Zone</th><th>Missions</th><th>Début</th><th>Durée</th>
-            </tr></thead>
-            <tbody id="serviceList"></tbody>
-          </table>
+      <!-- SANCTIONS -->
+      <div class="page" id="page-sanctions">
+        <div class="page-header">
+          <div class="page-header-left"><div class="page-label">Discipline</div><div class="page-title">Sanctions</div></div>
+          <button class="btn btn-accent" onclick="openSanctionModal()">+ Nouvelle sanction</button>
         </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Historique des sanctions</div>
+          <div class="card-actions">
+            <input type="text" class="search-input" placeholder="Rechercher..." oninput="filterSanctions(this.value)"/>
+            <select class="form-select" style="width:150px;padding:8px;" onchange="filterSanctionType(this.value)">
+              <option value="">Tous types</option>
+              <option value="Avertissement">Avertissement</option>
+              <option value="Blâme">Blâme</option>
+              <option value="Mise à pied">Mise à pied</option>
+              <option value="Note">Note interne</option>
+            </select>
+          </div></div>
+          <div id="sanction-list"></div>
+        </div>
+      </div>
+
+      <!-- CONGES -->
+      <div class="page" id="page-conges">
+        <div class="page-header">
+          <div class="page-header-left"><div class="page-label">Ressources humaines</div><div class="page-title">Congés & Absences</div></div>
+          <button class="btn btn-accent" onclick="openCongeModal()">+ Nouvelle demande</button>
+        </div>
+        <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);">
+          <div class="stat-card"><div class="stat-card-label">En attente</div><div class="stat-card-val yellow" id="cg-pending">0</div></div>
+          <div class="stat-card"><div class="stat-card-label">Approuvés</div><div class="stat-card-val green" id="cg-approved">0</div></div>
+          <div class="stat-card"><div class="stat-card-label">Refusés</div><div class="stat-card-val red" id="cg-refused">0</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Toutes les demandes</div></div>
+          <div id="conge-list"></div>
+        </div>
+      </div>
+
+      <!-- SALAIRES -->
+      <div class="page" id="page-salaires">
+        <div class="page-header">
+          <div class="page-header-left"><div class="page-label">Finance</div><div class="page-title">Compteur de salaires</div></div>
+          <button class="btn btn-outline" onclick="resetAllSalaries()">Réinitialiser tout</button>
+        </div>
+        <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);">
+          <div class="stat-card"><div class="stat-card-label">Masse salariale totale</div><div class="stat-card-val green" id="sal-total">0$</div><div class="stat-card-sub">Toutes missions confondues</div></div>
+          <div class="stat-card"><div class="stat-card-label">Missions totales</div><div class="stat-card-val" id="sal-missions">0</div><div class="stat-card-sub">Cumulées depuis la création</div></div>
+          <div class="stat-card"><div class="stat-card-label">Salaire moyen</div><div class="stat-card-val" id="sal-avg">0$</div><div class="stat-card-sub">Par employé</div></div>
+        </div>
+        <div id="sal-list"></div>
       </div>
 
       <!-- HIERARCHY -->
       <div class="page" id="page-hierarchy">
-        <div class="page-header">
-          <div class="page-label">Structure</div>
-          <div class="page-title">Grades & Hiérarchie</div>
-        </div>
-        <div class="hierarchy" id="hierarchyList"></div>
+        <div class="page-header"><div class="page-header-left"><div class="page-label">Structure</div><div class="page-title">Grades & Hiérarchie</div></div></div>
+        <div id="hier-list"></div>
       </div>
 
       <!-- LOGS -->
       <div class="page" id="page-logs">
         <div class="page-header">
-          <div class="page-label">Traçabilité</div>
-          <div class="page-title">Journal d'activité</div>
+          <div class="page-header-left"><div class="page-label">Traçabilité</div><div class="page-title">Journal d'activité</div></div>
+          <button class="btn btn-outline" onclick="clearLogs()">Effacer le journal</button>
         </div>
-        <div class="table-wrap">
-          <div class="table-header">
-            <div class="table-title">Historique</div>
-            <button class="btn btn-outline" onclick="clearLogs()">Effacer</button>
-          </div>
-          <div id="logList"></div>
-        </div>
+        <div class="card"><div id="log-list"></div></div>
       </div>
 
     </main>
   </div>
 </div>
 
-<!-- ADD/EDIT MODAL -->
-<div class="modal-overlay" id="employeeModal">
+<!-- MODALS -->
+
+<!-- ADD/EDIT EMPLOYEE -->
+<div class="modal-overlay" id="empModal">
   <div class="modal">
-    <div class="modal-title" id="modalTitle">Ajouter un employé</div>
+    <div class="modal-title" id="empModalTitle">Ajouter un employé</div>
     <div class="form-grid">
-      <div class="form-row">
-        <label class="form-label">Prénom & Nom</label>
-        <input type="text" class="form-input" id="empName" placeholder="Jean Dupont"/>
-      </div>
-      <div class="form-row">
-        <label class="form-label">ID / Pseudo FiveM</label>
-        <input type="text" class="form-input" id="empId" placeholder="XPO-001"/>
-      </div>
+      <div class="form-row"><label class="form-label">Prénom & Nom</label><input type="text" class="form-input" id="empName" placeholder="Jean Dupont"/></div>
+      <div class="form-row"><label class="form-label">ID / Pseudo FiveM</label><input type="text" class="form-input" id="empFivemId" placeholder="XPO-001"/></div>
     </div>
-    <div class="form-row">
-      <label class="form-label">Grade</label>
-      <select class="form-select" id="empGrade"></select>
-    </div>
+    <div class="form-row"><label class="form-label">Grade</label><select class="form-select" id="empGrade"></select></div>
     <div class="form-grid">
-      <div class="form-row">
-        <label class="form-label">Date d'embauche</label>
-        <input type="date" class="form-input" id="empDate"/>
-      </div>
-      <div class="form-row">
-        <label class="form-label">Note interne</label>
-        <input type="text" class="form-input" id="empNote" placeholder="Optionnel..."/>
-      </div>
+      <div class="form-row"><label class="form-label">Date d'embauche</label><input type="date" class="form-input" id="empDate"/></div>
+      <div class="form-row"><label class="form-label">Note interne</label><input type="text" class="form-input" id="empNote" placeholder="Optionnel..."/></div>
     </div>
-    <div class="modal-actions">
-      <button class="btn btn-outline" onclick="closeModal('employeeModal')">Annuler</button>
-      <button class="btn btn-red" onclick="saveEmployee()">Enregistrer</button>
-    </div>
+    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('empModal')">Annuler</button><button class="btn btn-accent" onclick="saveEmployee()">Enregistrer</button></div>
   </div>
 </div>
 
-<!-- CONFIRM MODAL -->
+<!-- EMPLOYEE PROFILE -->
+<div class="modal-overlay" id="profileModal">
+  <div class="modal" style="width:640px;">
+    <div class="profile-header">
+      <div class="profile-avatar" id="profileAvatar">J</div>
+      <div>
+        <div class="profile-name" id="profileName">—</div>
+        <div class="profile-id" id="profileId">—</div>
+        <div style="margin-top:8px;" id="profileGradeBadge"></div>
+      </div>
+      <button class="btn btn-outline btn-sm" style="margin-left:auto;" onclick="closeModal('profileModal')">✕ Fermer</button>
+    </div>
+    <div class="profile-tabs">
+      <div class="ptab active" onclick="switchTab('stats')">Statistiques</div>
+      <div class="ptab" onclick="switchTab('sanctions-p')">Sanctions</div>
+      <div class="ptab" onclick="switchTab('service-p')">Historique service</div>
+    </div>
+    <div class="ptab-content active" id="tab-stats">
+      <div class="form-grid" style="margin-bottom:20px;">
+        <div class="stat-card"><div class="stat-card-label">Missions totales</div><div class="stat-card-val" id="p-missions">0</div></div>
+        <div class="stat-card"><div class="stat-card-label">Salaire cumulé</div><div class="stat-card-val green" id="p-salary">0$</div></div>
+        <div class="stat-card"><div class="stat-card-label">Sanctions</div><div class="stat-card-val red" id="p-sanctions">0</div></div>
+        <div class="stat-card"><div class="stat-card-label">Jours de congés</div><div class="stat-card-val yellow" id="p-conges">0</div></div>
+      </div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;">Missions — 7 derniers jours</div>
+      <div class="mini-chart" id="p-chart"></div>
+      <div class="form-row" style="margin-top:16px;"><label class="form-label">Note interne</label><div id="p-note" style="color:var(--text2);font-size:0.87rem;padding:10px;background:var(--surface2);border:1px solid var(--border);">—</div></div>
+    </div>
+    <div class="ptab-content" id="tab-sanctions-p"><div id="p-sanctions-list"></div></div>
+    <div class="ptab-content" id="tab-service-p"><div id="p-service-list"></div></div>
+  </div>
+</div>
+
+<!-- SANCTION -->
+<div class="modal-overlay" id="sanctionModal">
+  <div class="modal">
+    <div class="modal-title">Nouvelle sanction</div>
+    <div class="form-row"><label class="form-label">Employé</label><select class="form-select" id="sanctEmployee"></select></div>
+    <div class="form-grid">
+      <div class="form-row"><label class="form-label">Type</label>
+        <select class="form-select" id="sanctType">
+          <option>Avertissement</option><option>Blâme</option><option>Mise à pied</option><option>Note interne</option>
+        </select>
+      </div>
+      <div class="form-row"><label class="form-label">Date</label><input type="date" class="form-input" id="sanctDate"/></div>
+    </div>
+    <div class="form-row"><label class="form-label">Motif</label><textarea class="form-textarea" id="sanctReason" placeholder="Décris le motif de la sanction..."></textarea></div>
+    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('sanctionModal')">Annuler</button><button class="btn btn-accent" onclick="saveSanction()">Appliquer</button></div>
+  </div>
+</div>
+
+<!-- CONGE -->
+<div class="modal-overlay" id="congeModal">
+  <div class="modal">
+    <div class="modal-title">Demande de congé / absence</div>
+    <div class="form-row"><label class="form-label">Employé</label><select class="form-select" id="congeEmployee"></select></div>
+    <div class="form-grid">
+      <div class="form-row"><label class="form-label">Type</label>
+        <select class="form-select" id="congeType">
+          <option>Congé</option><option>Absence justifiée</option><option>Absence injustifiée</option><option>Maladie</option>
+        </select>
+      </div>
+      <div class="form-row"><label class="form-label">Durée (jours)</label><input type="number" class="form-input" id="congeDays" placeholder="1" min="1"/></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-row"><label class="form-label">Date début</label><input type="date" class="form-input" id="congeStart"/></div>
+      <div class="form-row"><label class="form-label">Date fin</label><input type="date" class="form-input" id="congeEnd"/></div>
+    </div>
+    <div class="form-row"><label class="form-label">Motif</label><textarea class="form-textarea" id="congeReason" placeholder="Motif de l'absence..."></textarea></div>
+    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('congeModal')">Annuler</button><button class="btn btn-accent" onclick="saveConge()">Soumettre</button></div>
+  </div>
+</div>
+
+<!-- CONFIRM -->
 <div class="modal-overlay confirm-modal" id="confirmModal">
   <div class="modal">
-    <div class="modal-title">Confirmer</div>
+    <div class="modal-title">Confirmer l'action</div>
     <div class="confirm-text" id="confirmText"></div>
-    <div class="modal-actions" style="justify-content:center;">
-      <button class="btn btn-outline" onclick="closeModal('confirmModal')">Annuler</button>
-      <button class="btn btn-red" id="confirmBtn">Confirmer</button>
-    </div>
+    <div class="modal-actions centered"><button class="btn btn-outline" onclick="closeModal('confirmModal')">Annuler</button><button class="btn btn-red" id="confirmBtn">Confirmer</button></div>
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── CONFIG ───────────────────────────────────────
-const PASSWORD = 'xpo2025'; // Change ici ton mot de passe
+// ══════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════
+const PASSWORD = 'xpo2025'; // ← Change ici
 
 const GRADES = [
-  { id:0, name:'Chauffeur en probation',   color:'grade-0', desc:'Période d\'essai. Accès limité, missions simples uniquement.', perms:{service:true,  manage:false, recruit:false, promote:false, direction:false} },
-  { id:1, name:'Mécanicien XPO',           color:'grade-1', desc:'Spécialiste technique, entretien et réparation de la flotte.', perms:{service:true,  manage:false, recruit:false, promote:false, direction:false} },
-  { id:2, name:'Chauffeur Junior',          color:'grade-2', desc:'Chauffeur validé, missions standards autorisées.', perms:{service:true,  manage:false, recruit:false, promote:false, direction:false} },
-  { id:3, name:'Chauffeur Confirmé',        color:'grade-3', desc:'Chauffeur expérimenté, missions longue distance.', perms:{service:true,  manage:false, recruit:false, promote:false, direction:false} },
-  { id:4, name:'Responsable Technique',     color:'grade-4', desc:'Supervise la flotte et les opérations terrain.', perms:{service:true,  manage:true,  recruit:false, promote:false, direction:false} },
-  { id:5, name:'Responsable Recrutement',   color:'grade-5', desc:'Gère les candidatures et l\'intégration des nouveaux.', perms:{service:true,  manage:true,  recruit:true,  promote:false, direction:false} },
-  { id:6, name:'Régulateur de Flux',        color:'grade-6', desc:'Coordonne les missions et optimise les itinéraires.', perms:{service:true,  manage:true,  recruit:true,  promote:false, direction:false} },
-  { id:7, name:'Direction RH',              color:'grade-7', desc:'Gestion complète du personnel et des grades.', perms:{service:true,  manage:true,  recruit:true,  promote:true,  direction:false} },
-  { id:8, name:'Directeur d\'Exploitation', color:'grade-8', desc:'Dirige les opérations globales de l\'entreprise.', perms:{service:true,  manage:true,  recruit:true,  promote:true,  direction:true} },
-  { id:9, name:'PDG / CEO',                 color:'grade-9', desc:'Autorité suprême. Accès total à tous les systèmes.', perms:{service:true,  manage:true,  recruit:true,  promote:true,  direction:true} },
+  {id:0,name:'Chauffeur en probation',  color:'grade-0',salary:150, desc:'Période d\'essai. Accès limité, missions simples.',       perms:{service:true,manage:false,recruit:false,promote:false,direction:false}},
+  {id:1,name:'Mécanicien XPO',          color:'grade-1',salary:200, desc:'Entretien et réparation de la flotte.',                    perms:{service:true,manage:false,recruit:false,promote:false,direction:false}},
+  {id:2,name:'Chauffeur Junior',         color:'grade-2',salary:250, desc:'Chauffeur validé, missions standards autorisées.',         perms:{service:true,manage:false,recruit:false,promote:false,direction:false}},
+  {id:3,name:'Chauffeur Confirmé',       color:'grade-3',salary:350, desc:'Chauffeur expérimenté, longue distance.',                  perms:{service:true,manage:false,recruit:false,promote:false,direction:false}},
+  {id:4,name:'Responsable Technique',    color:'grade-4',salary:450, desc:'Supervise la flotte et les opérations terrain.',           perms:{service:true,manage:true,recruit:false,promote:false,direction:false}},
+  {id:5,name:'Responsable Recrutement',  color:'grade-5',salary:500, desc:'Gère les candidatures et l\'intégration.',                 perms:{service:true,manage:true,recruit:true,promote:false,direction:false}},
+  {id:6,name:'Régulateur de Flux',       color:'grade-6',salary:550, desc:'Coordonne les missions et optimise les itinéraires.',      perms:{service:true,manage:true,recruit:true,promote:false,direction:false}},
+  {id:7,name:'Direction RH',             color:'grade-7',salary:700, desc:'Gestion complète du personnel et des grades.',             perms:{service:true,manage:true,recruit:true,promote:true,direction:false}},
+  {id:8,name:'Directeur d\'Exploitation',color:'grade-8',salary:900, desc:'Dirige les opérations globales.',                          perms:{service:true,manage:true,recruit:true,promote:true,direction:true}},
+  {id:9,name:'PDG / CEO',                color:'grade-9',salary:1200,desc:'Autorité suprême. Accès total.',                           perms:{service:true,manage:true,recruit:true,promote:true,direction:true}},
 ];
 
-// ─── STATE ────────────────────────────────────────
-let employees = JSON.parse(localStorage.getItem('xpo_employees')||'[]');
-let services  = JSON.parse(localStorage.getItem('xpo_services')||'[]');
-let logs      = JSON.parse(localStorage.getItem('xpo_logs')||'[]');
-let editingId = null;
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let employees  = load('xpo_employees',[]);
+let services   = load('xpo_services',[]);
+let sanctions  = load('xpo_sanctions',[]);
+let conges     = load('xpo_conges',[]);
+let logs       = load('xpo_logs',[]);
+let editingEmpId = null;
+let currentProfileId = null;
+let gradeFilter = '';
+let sanctTypeFilter = '';
 
-// ─── SAVE ─────────────────────────────────────────
+function load(k,def){try{return JSON.parse(localStorage.getItem(k))||def;}catch{return def;}}
 function save(){
-  localStorage.setItem('xpo_employees', JSON.stringify(employees));
-  localStorage.setItem('xpo_services',  JSON.stringify(services));
-  localStorage.setItem('xpo_logs',      JSON.stringify(logs));
+  localStorage.setItem('xpo_employees',JSON.stringify(employees));
+  localStorage.setItem('xpo_services',JSON.stringify(services));
+  localStorage.setItem('xpo_sanctions',JSON.stringify(sanctions));
+  localStorage.setItem('xpo_conges',JSON.stringify(conges));
+  localStorage.setItem('xpo_logs',JSON.stringify(logs));
 }
 
-// ─── AUTH ─────────────────────────────────────────
+// ══════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════
 function tryLogin(){
-  const val = document.getElementById('passwordInput').value;
-  if(val === PASSWORD){
+  if(document.getElementById('passwordInput').value===PASSWORD){
     document.getElementById('lockScreen').style.display='none';
     document.getElementById('app').style.display='block';
     init();
   } else {
-    const err = document.getElementById('lockError');
-    err.classList.add('show');
-    setTimeout(()=>err.classList.remove('show'),3000);
+    const e=document.getElementById('lockError');
+    e.classList.add('show');setTimeout(()=>e.classList.remove('show'),3000);
   }
 }
 function logout(){
@@ -768,300 +644,550 @@ function logout(){
   document.getElementById('passwordInput').value='';
 }
 
-// ─── INIT ─────────────────────────────────────────
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
 function init(){
-  buildGradeOptions();
+  buildGradeSelects();
   buildHierarchy();
   renderAll();
   clock();
   setInterval(clock,1000);
-  setInterval(updateDurations,30000);
+  setInterval(()=>{renderService();renderDashboard();},30000);
+  // click outside modals
+  document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
 }
 
 function clock(){
-  const now = new Date();
-  const t = now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  document.getElementById('clock').textContent = t;
-  const sc = document.getElementById('svc-clock');
-  if(sc) sc.textContent = t;
+  const t=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('clock').textContent=t;
+  const sc=document.getElementById('svc-clock');if(sc)sc.textContent=t.slice(0,5);
 }
 
-function buildGradeOptions(){
-  ['empGrade','svcEmployee'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(!el) return;
-    if(id==='empGrade'){
-      el.innerHTML = GRADES.map(g=>`<option value="${g.id}">${g.name}</option>`).join('');
-    } else {
-      el.innerHTML = '<option value="">Sélectionner un employé...</option>' +
-        employees.map(e=>`<option value="${e.uid}">${e.name} — ${GRADES[e.grade].name}</option>`).join('');
-    }
+function buildGradeSelects(){
+  // emp grade
+  const eg=document.getElementById('empGrade');
+  eg.innerHTML=GRADES.map(g=>`<option value="${g.id}">${g.name}</option>`).join('');
+  // grade filter
+  const gf=document.querySelector('select[onchange="filterByGrade(this.value)"]');
+  if(gf) gf.innerHTML='<option value="">Tous les grades</option>'+GRADES.map(g=>`<option value="${g.id}">${g.name}</option>`).join('');
+  // employee dropdowns
+  buildEmpDropdowns();
+}
+
+function buildEmpDropdowns(){
+  const opts='<option value="">Sélectionner...</option>'+employees.map(e=>`<option value="${e.uid}">${e.name} — ${GRADES[e.grade].name}</option>`).join('');
+  ['svcEmployee','sanctEmployee','congeEmployee'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.innerHTML=opts;
   });
 }
 
-function buildHierarchy(){
-  const list = document.getElementById('hierarchyList');
-  list.innerHTML = [...GRADES].reverse().map((g,ri)=>{
-    const rank = GRADES.length - ri;
-    const perms = Object.entries(g.perms).map(([k,v])=>`<span class="perm-tag ${v?'yes':''}">${{service:'Service',manage:'Gestion',recruit:'Recrutement',promote:'Promotion',direction:'Direction'}[k]}</span>`).join('');
-    return `<div class="hier-row">
-      <div class="hier-rank">${rank}</div>
-      <div class="hier-info">
-        <div class="hier-name"><span class="badge ${g.color}">${g.name}</span></div>
-        <div class="hier-desc">${g.desc}</div>
-      </div>
-      <div class="hier-perms">${perms}</div>
-    </div>`;
-  }).join('');
-}
-
-// ─── RENDER ───────────────────────────────────────
+// ══════════════════════════════════════════
+// RENDER ALL
+// ══════════════════════════════════════════
 function renderAll(){
+  renderDashboard();
   renderEmployees();
   renderService();
-  renderDashboard();
+  renderSanctions();
+  renderConges();
+  renderSalaires();
   renderLogs();
-  buildGradeOptions();
+  updateBadges();
+  buildEmpDropdowns();
 }
 
-function renderEmployees(filter=''){
-  const tbody = document.getElementById('employeeList');
-  const filtered = employees.filter(e=>
-    e.name.toLowerCase().includes(filter.toLowerCase()) ||
-    e.fivemId.toLowerCase().includes(filter.toLowerCase())
-  );
-  if(!filtered.length){ tbody.innerHTML=`<tr><td colspan="6"><div class="empty">Aucun employé enregistré</div></td></tr>`; return; }
-  tbody.innerHTML = filtered.map(e=>{
-    const g = GRADES[e.grade];
-    const inSvc = services.find(s=>s.uid===e.uid);
-    const status = inSvc
-      ? `<span class="badge badge-service">En service</span>`
-      : `<span class="badge badge-offline">Hors service</span>`;
-    return `<tr>
-      <td><strong>${e.name}</strong><br><span style="color:var(--text3);font-size:0.75rem;">${e.fivemId}</span></td>
+// ── DASHBOARD ──
+function renderDashboard(){
+  document.getElementById('st-total').textContent=employees.length;
+  document.getElementById('st-online').textContent=services.length;
+  const activeSanct=sanctions.filter(s=>s.type!=='Note interne').length;
+  document.getElementById('st-sanctions').textContent=activeSanct;
+  const pendingCg=conges.filter(c=>c.status==='En attente').length;
+  document.getElementById('st-conges').textContent=pendingCg;
+
+  // service table
+  const dsv=document.getElementById('dash-service');
+  if(!services.length){dsv.innerHTML=`<tr><td colspan="7"><div class="empty">Aucun employé en service</div></td></tr>`;return;}
+  const now=Date.now();
+  dsv.innerHTML=services.map(s=>{
+    const emp=employees.find(e=>e.uid===s.uid);
+    const g=emp?GRADES[emp.grade]:{name:'?',color:'',salary:0};
+    const mins=Math.floor((now-s.startTs)/60000);
+    const dur=fmtDur(mins);
+    const estSal=((s.missions||0)*g.salary).toLocaleString('fr-FR')+'$';
+    return`<tr><td><strong>${emp?emp.name:'?'}</strong></td><td><span class="badge ${g.color}">${g.name}</span></td><td>${s.vehicle||'—'}</td><td>${s.zone||'—'}</td><td>${s.missions||0}</td><td>${s.startTime}</td><td><span class="badge b-accent">${dur}</span></td></tr>`;
+  }).join('');
+
+  // dash sanctions
+  const dsa=document.getElementById('dash-sanctions');
+  const rec=sanctions.slice(-3).reverse();
+  dsa.innerHTML=rec.length?rec.map(s=>{
+    const emp=employees.find(e=>e.uid===s.uid);
+    return`<div class="sanction-item"><div class="sanction-icon ${s.type==='Avertissement'?'si-warn':s.type==='Note interne'?'si-note':'si-bl'}">${s.type==='Avertissement'?'⚠':'📋'}</div><div class="sanction-body"><div class="sanction-type">${s.type} — ${emp?emp.name:'?'}</div><div class="sanction-reason">${s.reason}</div><div class="sanction-date">${s.date}</div></div></div>`;
+  }).join(''):`<div class="empty">Aucune sanction</div>`;
+
+  // dash conges
+  const dcg=document.getElementById('dash-conges');
+  const pend=conges.filter(c=>c.status==='En attente').slice(0,4);
+  dcg.innerHTML=pend.length?pend.map(c=>{
+    const emp=employees.find(e=>e.uid===c.uid);
+    return`<div class="conge-item"><div style="flex:1"><div style="font-weight:600;font-size:0.87rem;color:var(--text)">${emp?emp.name:'?'}</div><div style="font-size:0.78rem;color:var(--text3)">${c.type} · ${c.days}j · ${c.start}</div></div><div style="display:flex;gap:6px;"><button class="act green" onclick="updateConge('${c.id}','Approuvé')">✓</button><button class="act red" onclick="updateConge('${c.id}','Refusé')">✕</button></div></div>`;
+  }).join(''):`<div class="empty">Aucune demande en attente</div>`;
+}
+
+// ── EMPLOYEES ──
+function renderEmployees(nameFilter='',gFilter=gradeFilter){
+  const tbody=document.getElementById('emp-list');
+  let list=employees.filter(e=>{
+    const nm=e.name.toLowerCase().includes(nameFilter.toLowerCase())||e.fivemId.toLowerCase().includes(nameFilter.toLowerCase());
+    const gd=gFilter===''||e.grade==gFilter;
+    return nm&&gd;
+  });
+  if(!list.length){tbody.innerHTML=`<tr><td colspan="8"><div class="empty">Aucun employé trouvé</div></td></tr>`;return;}
+  tbody.innerHTML=list.map(e=>{
+    const g=GRADES[e.grade];
+    const inSvc=services.find(s=>s.uid===e.uid);
+    const eSanct=sanctions.filter(s=>s.uid===e.uid&&s.type!=='Note interne').length;
+    const status=inSvc?`<span class="badge b-accent">En service</span>`:`<span class="badge b-gray">Hors service</span>`;
+    const sanctBadge=eSanct?`<span class="badge b-red">${eSanct} sanction${eSanct>1?'s':''}</span>`:'—';
+    return`<tr>
+      <td><strong>${e.name}</strong><br><span style="color:var(--text3);font-size:0.73rem;">${e.fivemId}</span></td>
       <td><span class="badge ${g.color}">${g.name}</span></td>
       <td>${status}</td>
       <td>${e.missions||0}</td>
+      <td>${sanctBadge}</td>
+      <td><span style="color:var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:700;">${g.salary}$/mission</span></td>
       <td>${e.hired}</td>
-      <td><div class="action-btns">
-        <button class="action-btn" onclick="openEditModal('${e.uid}')">Éditer</button>
-        <button class="action-btn promote" onclick="promoteEmployee('${e.uid}',1)">▲</button>
-        <button class="action-btn promote" style="color:var(--text3)" onclick="promoteEmployee('${e.uid}',-1)">▼</button>
-        <button class="action-btn del" onclick="confirmDelete('${e.uid}')">Retirer</button>
+      <td><div style="display:flex;gap:5px;flex-wrap:wrap;">
+        <button class="act" onclick="openProfile('${e.uid}')">Profil</button>
+        <button class="act" onclick="openEditModal('${e.uid}')">Éditer</button>
+        <button class="act green" onclick="promoteEmp('${e.uid}',1)" title="Promouvoir">▲</button>
+        <button class="act" style="color:var(--text3)" onclick="promoteEmp('${e.uid}',-1)" title="Rétrograder">▼</button>
+        <button class="act red" onclick="confirmDelete('${e.uid}')">Retirer</button>
       </div></td>
     </tr>`;
   }).join('');
 }
 
+// ── SERVICE ──
 function renderService(){
-  const tbody = document.getElementById('serviceList');
-  const count = document.getElementById('svc-count');
-  const mcount = document.getElementById('svc-missions');
-  if(count) count.textContent = services.length;
-  const totalM = services.reduce((a,s)=>a+(parseInt(s.missions)||0),0);
-  if(mcount) mcount.textContent = totalM;
-  if(!services.length){ tbody.innerHTML=`<tr><td colspan="7"><div class="empty">Aucun employé en service</div></td></tr>`; return; }
-  const now = Date.now();
-  tbody.innerHTML = services.map(s=>{
-    const emp = employees.find(e=>e.uid===s.uid);
-    const g = emp ? GRADES[emp.grade] : {name:'Inconnu',color:''};
-    const mins = Math.floor((now - s.startTs)/60000);
-    const dur = mins<60 ? `${mins}min` : `${Math.floor(mins/60)}h${String(mins%60).padStart(2,'0')}`;
-    return `<tr>
-      <td>${emp?emp.name:'Inconnu'}</td>
+  const tbody=document.getElementById('svc-list');
+  document.getElementById('svc-count').textContent=services.length;
+  const totalM=services.reduce((a,s)=>a+(parseInt(s.missions)||0),0);
+  document.getElementById('svc-missions').textContent=totalM;
+  if(!services.length){tbody.innerHTML=`<tr><td colspan="8"><div class="empty">Aucun employé en service</div></td></tr>`;return;}
+  const now=Date.now();
+  tbody.innerHTML=services.map(s=>{
+    const emp=employees.find(e=>e.uid===s.uid);
+    const g=emp?GRADES[emp.grade]:{name:'?',color:'',salary:0};
+    const mins=Math.floor((now-s.startTs)/60000);
+    const estSal=((s.missions||0)*g.salary).toLocaleString('fr-FR')+'$';
+    return`<tr>
+      <td><strong>${emp?emp.name:'?'}</strong></td>
       <td><span class="badge ${g.color}">${g.name}</span></td>
-      <td>${s.vehicle||'—'}</td>
-      <td>${s.zone||'—'}</td>
-      <td>${s.missions||0}</td>
-      <td>${s.startTime}</td>
-      <td><span class="badge badge-service">${dur}</span></td>
+      <td>${s.vehicle||'—'}</td><td>${s.zone||'—'}</td>
+      <td>${s.missions||0}</td><td>${s.startTime}</td>
+      <td><span class="badge b-accent">${fmtDur(mins)}</span></td>
+      <td style="color:var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:700;">${estSal}</td>
     </tr>`;
   }).join('');
 }
 
-function renderDashboard(){
-  document.getElementById('stat-total').textContent = employees.length;
-  document.getElementById('stat-online').textContent = services.length;
-  const totalM = employees.reduce((a,e)=>a+(e.missions||0),0);
-  document.getElementById('stat-missions').textContent = totalM;
-  const rate = employees.length ? Math.round(services.length/employees.length*100) : 0;
-  document.getElementById('stat-rate').innerHTML = `${rate}<span>%</span>`;
-
-  const tbody = document.getElementById('dashServiceList');
-  if(!services.length){ tbody.innerHTML=`<tr><td colspan="6"><div class="empty">Aucun employé en service</div></td></tr>`; return; }
-  tbody.innerHTML = services.map(s=>{
-    const emp = employees.find(e=>e.uid===s.uid);
-    const g = emp ? GRADES[emp.grade] : {name:'Inconnu',color:''};
-    return `<tr>
-      <td>${emp?emp.name:'?'}</td>
-      <td><span class="badge ${g.color}">${g.name}</span></td>
-      <td>${s.vehicle||'—'}</td>
-      <td>${s.zone||'—'}</td>
-      <td>${s.missions||0}</td>
-      <td>${s.startTime}</td>
-    </tr>`;
-  }).join('');
-}
-
-function renderLogs(){
-  const el = document.getElementById('logList');
-  if(!logs.length){ el.innerHTML=`<div class="empty">Aucune activité enregistrée</div>`; return; }
-  el.innerHTML = [...logs].reverse().map(l=>`
-    <div class="log-entry">
-      <div class="log-dot ${l.type}"></div>
-      <div class="log-main">
-        <div class="log-text">${l.text}</div>
-        <div class="log-time">${l.time}</div>
+// ── SANCTIONS ──
+function renderSanctions(nameFilter='',typeFilter=sanctTypeFilter){
+  const el=document.getElementById('sanction-list');
+  let list=sanctions.filter(s=>{
+    const emp=employees.find(e=>e.uid===s.uid);
+    const nm=!nameFilter||(emp&&emp.name.toLowerCase().includes(nameFilter.toLowerCase()));
+    const tp=!typeFilter||s.type===typeFilter;
+    return nm&&tp;
+  }).reverse();
+  if(!list.length){el.innerHTML=`<div class="empty">Aucune sanction enregistrée</div>`;return;}
+  el.innerHTML=list.map(s=>{
+    const emp=employees.find(e=>e.uid===s.uid);
+    const icon=s.type==='Avertissement'?'⚠':s.type==='Note interne'?'📋':s.type==='Mise à pied'?'🚫':'❗';
+    const cls=s.type==='Avertissement'?'si-warn':s.type==='Note interne'?'si-note':'si-bl';
+    return`<div class="sanction-item">
+      <div class="sanction-icon ${cls}">${icon}</div>
+      <div class="sanction-body">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+          <div class="sanction-type">${s.type}</div>
+          <span style="color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;">${emp?emp.name:'Employé retiré'}</span>
+          ${emp?`<span class="badge ${GRADES[emp.grade].color}" style="font-size:0.55rem;">${GRADES[emp.grade].name}</span>`:''}
+        </div>
+        <div class="sanction-reason">${s.reason}</div>
+        <div class="sanction-date">${s.date}</div>
       </div>
-    </div>`).join('');
+      <button class="act red" onclick="deleteSanction('${s.id}')">Supprimer</button>
+    </div>`;
+  }).join('');
 }
 
-function updateDurations(){ renderService(); }
+// ── CONGES ──
+function renderConges(){
+  const el=document.getElementById('conge-list');
+  document.getElementById('cg-pending').textContent=conges.filter(c=>c.status==='En attente').length;
+  document.getElementById('cg-approved').textContent=conges.filter(c=>c.status==='Approuvé').length;
+  document.getElementById('cg-refused').textContent=conges.filter(c=>c.status==='Refusé').length;
+  if(!conges.length){el.innerHTML=`<div class="empty">Aucune demande enregistrée</div>`;return;}
+  el.innerHTML=[...conges].reverse().map(c=>{
+    const emp=employees.find(e=>e.uid===c.uid);
+    const statusBadge=c.status==='En attente'?'b-yellow':c.status==='Approuvé'?'b-green':'b-red';
+    return`<div class="conge-item">
+      <div style="flex:1;">
+        <div style="font-weight:600;font-size:0.9rem;color:var(--text);margin-bottom:3px;">${emp?emp.name:'?'} <span style="color:var(--text3);font-size:0.78rem;">· ${c.type} · ${c.days}j</span></div>
+        <div style="font-size:0.78rem;color:var(--text3);">${c.start} → ${c.end} · ${c.reason}</div>
+      </div>
+      <span class="badge ${statusBadge}">${c.status}</span>
+      ${c.status==='En attente'?`<button class="act green" onclick="updateConge('${c.id}','Approuvé')">✓ Approuver</button><button class="act red" onclick="updateConge('${c.id}','Refusé')">✕ Refuser</button>`:''}
+      <button class="act red" onclick="deleteConge('${c.id}')">🗑</button>
+    </div>`;
+  }).join('');
+}
 
-// ─── EMPLOYEES CRUD ───────────────────────────────
+// ── SALAIRES ──
+function renderSalaires(){
+  const el=document.getElementById('sal-list');
+  if(!employees.length){el.innerHTML=`<div class="empty">Aucun employé enregistré</div>`;return;}
+  const sorted=[...employees].sort((a,b)=>(b.missions||0)*GRADES[b.grade].salary-(a.missions||0)*GRADES[a.grade].salary);
+  const maxSal=Math.max(...sorted.map(e=>(e.missions||0)*GRADES[e.grade].salary),1);
+  const total=sorted.reduce((a,e)=>a+(e.missions||0)*GRADES[e.grade].salary,0);
+  const totalM=sorted.reduce((a,e)=>a+(e.missions||0),0);
+  document.getElementById('sal-total').textContent=total.toLocaleString('fr-FR')+'$';
+  document.getElementById('sal-missions').textContent=totalM;
+  document.getElementById('sal-avg').textContent=employees.length?Math.round(total/employees.length).toLocaleString('fr-FR')+'$':'0$';
+  el.innerHTML=sorted.map(e=>{
+    const g=GRADES[e.grade];
+    const sal=(e.missions||0)*g.salary;
+    const pct=Math.round(sal/maxSal*100);
+    return`<div class="salary-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div class="salary-name">${e.name}</div>
+          <div class="salary-grade"><span class="badge ${g.color}">${g.name}</span> · ${g.salary}$/mission</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="salary-total">${sal.toLocaleString('fr-FR')}$</div>
+          <div style="font-size:0.75rem;color:var(--text3);">${e.missions||0} mission${(e.missions||0)!==1?'s':''}</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;">
+        <div class="salary-bar-wrap"><div class="salary-bar" style="width:${pct}%"></div></div>
+        <div class="salary-nums"><span>${pct}% du max</span><span>Base: ${g.salary}$/mission</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── HIERARCHY ──
+function buildHierarchy(){
+  const el=document.getElementById('hier-list');
+  el.innerHTML=[...GRADES].reverse().map((g,ri)=>{
+    const rank=GRADES.length-ri;
+    const perms=Object.entries(g.perms).map(([k,v])=>`<span class="perm-tag ${v?'yes':''}">${{service:'Service',manage:'Gestion',recruit:'Recrutement',promote:'Promotion',direction:'Direction'}[k]}</span>`).join('');
+    return`<div class="hier-row">
+      <div class="hier-rank">${rank}</div>
+      <div class="hier-info"><div class="hier-name"><span class="badge ${g.color}">${g.name}</span></div><div class="hier-desc">${g.desc}</div></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;max-width:320px;">${perms}</div>
+      <div class="hier-salary">${g.salary}$/mission</div>
+    </div>`;
+  }).join('');
+}
+
+// ── LOGS ──
+function renderLogs(){
+  const el=document.getElementById('log-list');
+  if(!logs.length){el.innerHTML=`<div class="empty">Aucune activité</div>`;return;}
+  el.innerHTML=[...logs].reverse().map(l=>`<div class="log-entry"><div class="log-dot ${l.type}"></div><div class="log-main"><div class="log-text">${l.text}</div><div class="log-time">${l.time}</div></div></div>`).join('');
+}
+
+function updateBadges(){
+  const sb=document.getElementById('sanctBadge');
+  const cnt=sanctions.filter(s=>s.type!=='Note interne').length;
+  sb.style.display=cnt?'':'none';sb.textContent=cnt;
+  const cb=document.getElementById('congeBadge');
+  const cp=conges.filter(c=>c.status==='En attente').length;
+  cb.style.display=cp?'':'none';cb.textContent=cp;
+}
+
+// ══════════════════════════════════════════
+// EMPLOYEE CRUD
+// ══════════════════════════════════════════
 function openAddModal(){
-  editingId=null;
-  document.getElementById('modalTitle').textContent='Ajouter un employé';
+  editingEmpId=null;
+  document.getElementById('empModalTitle').textContent='Ajouter un employé';
   document.getElementById('empName').value='';
-  document.getElementById('empId').value='';
+  document.getElementById('empFivemId').value='';
   document.getElementById('empGrade').value=0;
-  document.getElementById('empDate').value=new Date().toISOString().split('T')[0];
+  document.getElementById('empDate').value=today();
   document.getElementById('empNote').value='';
-  document.getElementById('employeeModal').classList.add('open');
+  openModal('empModal');
 }
-
 function openEditModal(uid){
-  editingId=uid;
-  const e = employees.find(e=>e.uid===uid);
-  document.getElementById('modalTitle').textContent='Modifier l\'employé';
+  editingEmpId=uid;
+  const e=employees.find(e=>e.uid===uid);
+  document.getElementById('empModalTitle').textContent='Modifier l\'employé';
   document.getElementById('empName').value=e.name;
-  document.getElementById('empId').value=e.fivemId;
+  document.getElementById('empFivemId').value=e.fivemId;
   document.getElementById('empGrade').value=e.grade;
   document.getElementById('empDate').value=e.hired;
   document.getElementById('empNote').value=e.note||'';
-  document.getElementById('employeeModal').classList.add('open');
+  openModal('empModal');
 }
-
 function saveEmployee(){
-  const name = document.getElementById('empName').value.trim();
-  const fivemId = document.getElementById('empId').value.trim();
-  const grade = parseInt(document.getElementById('empGrade').value);
-  const hired = document.getElementById('empDate').value;
-  const note = document.getElementById('empNote').value.trim();
-  if(!name||!fivemId){ showToast('Remplis tous les champs obligatoires.','error'); return; }
-
-  if(editingId){
-    const idx = employees.findIndex(e=>e.uid===editingId);
-    const old = employees[idx];
-    employees[idx] = {...old, name, fivemId, grade, hired, note};
-    addLog('edit', `<strong>${name}</strong> modifié — Grade: ${GRADES[grade].name}`);
+  const name=document.getElementById('empName').value.trim();
+  const fivemId=document.getElementById('empFivemId').value.trim();
+  const grade=parseInt(document.getElementById('empGrade').value);
+  const hired=document.getElementById('empDate').value;
+  const note=document.getElementById('empNote').value.trim();
+  if(!name||!fivemId){showToast('Remplis tous les champs.','error');return;}
+  if(editingEmpId){
+    const idx=employees.findIndex(e=>e.uid===editingEmpId);
+    employees[idx]={...employees[idx],name,fivemId,grade,hired,note};
+    addLog('edit',`<strong>${name}</strong> modifié — Grade: ${GRADES[grade].name}`);
     showToast('Employé mis à jour.');
   } else {
-    const uid = 'emp_'+Date.now();
-    employees.push({uid,name,fivemId,grade,hired,note,missions:0});
-    addLog('add', `<strong>${name}</strong> ajouté — ${GRADES[grade].name}`);
-    showToast('Employé ajouté avec succès.');
+    const uid='emp_'+Date.now();
+    employees.push({uid,name,fivemId,grade,hired,note,missions:0,missionHistory:[]});
+    addLog('add',`<strong>${name}</strong> ajouté — ${GRADES[grade].name}`);
+    showToast('Employé ajouté.');
   }
-  save(); renderAll();
-  closeModal('employeeModal');
+  save();renderAll();closeModal('empModal');
 }
-
-function promoteEmployee(uid,dir){
-  const idx = employees.findIndex(e=>e.uid===uid);
-  const e = employees[idx];
-  const ng = Math.max(0,Math.min(9,e.grade+dir));
-  if(ng===e.grade) return;
+function promoteEmp(uid,dir){
+  const idx=employees.findIndex(e=>e.uid===uid);
+  const e=employees[idx];
+  const ng=Math.max(0,Math.min(9,e.grade+dir));
+  if(ng===e.grade)return;
   employees[idx].grade=ng;
   addLog(dir>0?'add':'edit',`<strong>${e.name}</strong> ${dir>0?'promu':'rétrogradé'} → ${GRADES[ng].name}`);
-  save(); renderAll();
-  showToast(dir>0?'Employé promu.':'Employé rétrogradé.');
+  save();renderAll();showToast(dir>0?'Employé promu.':'Employé rétrogradé.');
 }
-
 function confirmDelete(uid){
-  const e = employees.find(e=>e.uid===uid);
-  document.getElementById('confirmText').textContent=`Voulez-vous vraiment retirer ${e.name} de l'équipe XPO ?`;
+  const e=employees.find(e=>e.uid===uid);
+  document.getElementById('confirmText').textContent=`Retirer ${e.name} de l'équipe XPO ? Cette action est irréversible.`;
   document.getElementById('confirmBtn').onclick=()=>deleteEmployee(uid);
-  document.getElementById('confirmModal').classList.add('open');
+  openModal('confirmModal');
 }
-
 function deleteEmployee(uid){
-  const e = employees.find(e=>e.uid===uid);
-  employees = employees.filter(e=>e.uid!==uid);
-  services = services.filter(s=>s.uid!==uid);
+  const e=employees.find(e=>e.uid===uid);
+  employees=employees.filter(e=>e.uid!==uid);
+  services=services.filter(s=>s.uid!==uid);
   addLog('out',`<strong>${e.name}</strong> retiré de l'équipe.`);
-  save(); renderAll();
-  closeModal('confirmModal');
-  showToast('Employé retiré.');
+  save();renderAll();closeModal('confirmModal');showToast('Employé retiré.');
+}
+function filterEmployees(v){renderEmployees(v,gradeFilter);}
+function filterByGrade(v){gradeFilter=v;renderEmployees('',v);}
+
+// ══════════════════════════════════════════
+// PROFILE
+// ══════════════════════════════════════════
+function openProfile(uid){
+  currentProfileId=uid;
+  const e=employees.find(e=>e.uid===uid);
+  const g=GRADES[e.grade];
+  document.getElementById('profileAvatar').textContent=e.name.charAt(0).toUpperCase();
+  document.getElementById('profileName').textContent=e.name;
+  document.getElementById('profileId').textContent=e.fivemId+' · Embauché le '+e.hired;
+  document.getElementById('profileGradeBadge').innerHTML=`<span class="badge ${g.color}">${g.name}</span>`;
+  document.getElementById('p-missions').textContent=e.missions||0;
+  document.getElementById('p-salary').textContent=((e.missions||0)*g.salary).toLocaleString('fr-FR')+'$';
+  const eSanct=sanctions.filter(s=>s.uid===uid&&s.type!=='Note interne').length;
+  document.getElementById('p-sanctions').textContent=eSanct;
+  const eDays=conges.filter(c=>c.uid===uid&&c.status==='Approuvé').reduce((a,c)=>a+(parseInt(c.days)||0),0);
+  document.getElementById('p-conges').textContent=eDays;
+  document.getElementById('p-note').textContent=e.note||'Aucune note.';
+  // mini chart — last 7 services
+  const hist=e.missionHistory||[];
+  const chart=document.getElementById('p-chart');
+  const days=7;const buckets=Array(days).fill(0);
+  hist.forEach(h=>{const d=Math.floor((Date.now()-h.ts)/86400000);if(d<days)buckets[days-1-d]+=h.count;});
+  const maxB=Math.max(...buckets,1);
+  chart.innerHTML=buckets.map((b,i)=>`<div class="mini-bar" style="height:${Math.max(4,Math.round(b/maxB*56))}px" title="${b} missions"></div>`).join('');
+  // sanctions list
+  const sl=sanctions.filter(s=>s.uid===uid).reverse();
+  document.getElementById('p-sanctions-list').innerHTML=sl.length?sl.map(s=>{
+    const icon=s.type==='Avertissement'?'⚠':s.type==='Note interne'?'📋':'❗';
+    const cls=s.type==='Avertissement'?'si-warn':s.type==='Note interne'?'si-note':'si-bl';
+    return`<div class="sanction-item"><div class="sanction-icon ${cls}">${icon}</div><div class="sanction-body"><div class="sanction-type">${s.type}</div><div class="sanction-reason">${s.reason}</div><div class="sanction-date">${s.date}</div></div></div>`;
+  }).join(''):`<div class="empty">Aucune sanction</div>`;
+  // service history
+  const sh=e.serviceHistory||[];
+  document.getElementById('p-service-list').innerHTML=sh.length?[...sh].reverse().slice(0,10).map(h=>`
+    <div style="padding:12px 16px;border-bottom:1px solid var(--border);font-size:0.85rem;">
+      <div style="color:var(--text)">${h.date} · ${h.vehicle||'—'} · ${h.zone||'—'}</div>
+      <div style="color:var(--text3);margin-top:2px;">${h.missions} missions · Durée: ${h.duration}</div>
+    </div>`).join(''):`<div class="empty">Aucun historique</div>`;
+  // reset tabs
+  document.querySelectorAll('.ptab').forEach((t,i)=>t.classList.toggle('active',i===0));
+  document.querySelectorAll('.ptab-content').forEach((c,i)=>c.classList.toggle('active',i===0));
+  openModal('profileModal');
+}
+function switchTab(id){
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.ptab-content').forEach(c=>c.classList.remove('active'));
+  const tabMap={'stats':0,'sanctions-p':1,'service-p':2};
+  document.querySelectorAll('.ptab')[tabMap[id]].classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
 }
 
-function filterEmployees(val){ renderEmployees(val); }
-
-// ─── SERVICE ──────────────────────────────────────
+// ══════════════════════════════════════════
+// SERVICE
+// ══════════════════════════════════════════
 function takeService(){
-  const uid = document.getElementById('svcEmployee').value;
-  const vehicle = document.getElementById('svcVehicle').value.trim();
-  const zone = document.getElementById('svcZone').value.trim();
-  const missions = parseInt(document.getElementById('svcMissions').value)||0;
-  if(!uid){ showToast('Sélectionne un employé.','error'); return; }
-  if(services.find(s=>s.uid===uid)){ showToast('Cet employé est déjà en service.','error'); return; }
-  const emp = employees.find(e=>e.uid===uid);
-  const now = new Date();
-  services.push({uid, vehicle, zone, missions, startTime: now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}), startTs: now.getTime()});
-  emp.missions = (emp.missions||0) + missions;
-  addLog('in',`<strong>${emp.name}</strong> a pris le service — Véhicule: ${vehicle||'—'} | Zone: ${zone||'—'} | Missions: ${missions}`);
-  save(); renderAll();
-  document.getElementById('svcVehicle').value='';
-  document.getElementById('svcZone').value='';
-  document.getElementById('svcMissions').value='';
-  showToast(`${emp.name} est maintenant en service.`);
+  const uid=document.getElementById('svcEmployee').value;
+  const vehicle=document.getElementById('svcVehicle').value.trim();
+  const zone=document.getElementById('svcZone').value.trim();
+  const missions=parseInt(document.getElementById('svcMissions').value)||0;
+  if(!uid){showToast('Sélectionne un employé.','error');return;}
+  if(services.find(s=>s.uid===uid)){showToast('Déjà en service.','warn');return;}
+  const emp=employees.find(e=>e.uid===uid);
+  const now=new Date();
+  services.push({uid,vehicle,zone,missions,startTime:now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}),startTs:now.getTime()});
+  emp.missions=(emp.missions||0)+missions;
+  if(!emp.missionHistory)emp.missionHistory=[];
+  if(missions>0)emp.missionHistory.push({ts:now.getTime(),count:missions});
+  addLog('in',`<strong>${emp.name}</strong> en service — ${vehicle||'—'} · ${zone||'—'} · ${missions} missions`);
+  save();renderAll();
+  document.getElementById('svcVehicle').value='';document.getElementById('svcZone').value='';document.getElementById('svcMissions').value='';
+  showToast(`${emp.name} est en service.`);
 }
-
 function endService(){
-  const uid = document.getElementById('svcEmployee').value;
-  if(!uid){ showToast('Sélectionne un employé.','error'); return; }
-  const svc = services.find(s=>s.uid===uid);
-  if(!svc){ showToast('Cet employé n\'est pas en service.','error'); return; }
-  const emp = employees.find(e=>e.uid===uid);
-  const mins = Math.floor((Date.now()-svc.startTs)/60000);
-  const dur = mins<60?`${mins}min`:`${Math.floor(mins/60)}h${String(mins%60).padStart(2,'0')}`;
-  services = services.filter(s=>s.uid!==uid);
-  addLog('out',`<strong>${emp.name}</strong> a terminé son service — Durée: ${dur}`);
-  save(); renderAll();
-  showToast(`${emp.name} a terminé son service (${dur}).`);
+  const uid=document.getElementById('svcEmployee').value;
+  if(!uid){showToast('Sélectionne un employé.','error');return;}
+  const svc=services.find(s=>s.uid===uid);
+  if(!svc){showToast('Cet employé n\'est pas en service.','warn');return;}
+  const emp=employees.find(e=>e.uid===uid);
+  const mins=Math.floor((Date.now()-svc.startTs)/60000);
+  const dur=fmtDur(mins);
+  if(!emp.serviceHistory)emp.serviceHistory=[];
+  emp.serviceHistory.push({date:new Date().toLocaleDateString('fr-FR'),vehicle:svc.vehicle,zone:svc.zone,missions:svc.missions,duration:dur});
+  services=services.filter(s=>s.uid!==uid);
+  addLog('out',`<strong>${emp.name}</strong> fin de service — Durée: ${dur} · ${svc.missions} missions`);
+  save();renderAll();showToast(`${emp.name} a terminé (${dur}).`);
+}
+function updateServiceMissions(){
+  const uid=document.getElementById('svcEmployee').value;
+  const add=parseInt(document.getElementById('svcMissions').value)||0;
+  if(!uid||!add){showToast('Sélectionne un employé et saisis un nombre.','error');return;}
+  const svc=services.find(s=>s.uid===uid);
+  if(!svc){showToast('Cet employé n\'est pas en service.','warn');return;}
+  svc.missions=(svc.missions||0)+add;
+  const emp=employees.find(e=>e.uid===uid);
+  emp.missions=(emp.missions||0)+add;
+  if(!emp.missionHistory)emp.missionHistory=[];
+  emp.missionHistory.push({ts:Date.now(),count:add});
+  addLog('edit',`<strong>${emp.name}</strong> +${add} missions ajoutées`);
+  save();renderAll();document.getElementById('svcMissions').value='';
+  showToast(`+${add} missions pour ${emp.name}.`);
 }
 
-// ─── LOGS ─────────────────────────────────────────
-function addLog(type, text){
-  logs.push({type, text, time: new Date().toLocaleString('fr-FR')});
-  if(logs.length>200) logs = logs.slice(-200);
+// ══════════════════════════════════════════
+// SANCTIONS
+// ══════════════════════════════════════════
+function openSanctionModal(){
+  document.getElementById('sanctDate').value=today();
+  document.getElementById('sanctReason').value='';
+  openModal('sanctionModal');
 }
-function clearLogs(){ logs=[]; save(); renderLogs(); showToast('Journal effacé.'); }
+function saveSanction(){
+  const uid=document.getElementById('sanctEmployee').value;
+  const type=document.getElementById('sanctType').value;
+  const date=document.getElementById('sanctDate').value;
+  const reason=document.getElementById('sanctReason').value.trim();
+  if(!uid||!reason){showToast('Remplis tous les champs.','error');return;}
+  const emp=employees.find(e=>e.uid===uid);
+  const id='s_'+Date.now();
+  sanctions.push({id,uid,type,date,reason});
+  addLog('sanction',`Sanction <strong>${type}</strong> → <strong>${emp.name}</strong> : ${reason}`);
+  save();renderAll();closeModal('sanctionModal');
+  showToast(`Sanction appliquée à ${emp.name}.`,'warn');
+}
+function deleteSanction(id){sanctions=sanctions.filter(s=>s.id!==id);save();renderAll();showToast('Sanction supprimée.');}
+function filterSanctions(v){renderSanctions(v,sanctTypeFilter);}
+function filterSanctionType(v){sanctTypeFilter=v;renderSanctions('',v);}
 
-// ─── UI HELPERS ───────────────────────────────────
-function showPage(id, el){
+// ══════════════════════════════════════════
+// CONGES
+// ══════════════════════════════════════════
+function openCongeModal(){
+  document.getElementById('congeStart').value=today();
+  document.getElementById('congeEnd').value=today();
+  document.getElementById('congeReason').value='';
+  document.getElementById('congeDays').value='';
+  openModal('congeModal');
+}
+function saveConge(){
+  const uid=document.getElementById('congeEmployee').value;
+  const type=document.getElementById('congeType').value;
+  const days=parseInt(document.getElementById('congeDays').value)||1;
+  const start=document.getElementById('congeStart').value;
+  const end=document.getElementById('congeEnd').value;
+  const reason=document.getElementById('congeReason').value.trim();
+  if(!uid){showToast('Sélectionne un employé.','error');return;}
+  const emp=employees.find(e=>e.uid===uid);
+  const id='c_'+Date.now();
+  conges.push({id,uid,type,days,start,end,reason,status:'En attente',created:today()});
+  addLog('edit',`Demande de <strong>${type}</strong> — <strong>${emp.name}</strong> (${days}j)`);
+  save();renderAll();closeModal('congeModal');showToast('Demande enregistrée.');
+}
+function updateConge(id,status){
+  const c=conges.find(c=>c.id===id);
+  if(!c)return;
+  c.status=status;
+  const emp=employees.find(e=>e.uid===c.uid);
+  addLog(status==='Approuvé'?'add':'out',`Congé <strong>${status}</strong> → <strong>${emp?emp.name:'?'}</strong>`);
+  save();renderAll();showToast(`Demande ${status.toLowerCase()}.`);
+}
+function deleteConge(id){conges=conges.filter(c=>c.id!==id);save();renderAll();showToast('Demande supprimée.');}
+
+// ══════════════════════════════════════════
+// SALAIRES
+// ══════════════════════════════════════════
+function resetAllSalaries(){
+  document.getElementById('confirmText').textContent='Réinitialiser le compteur de missions de TOUS les employés ? (Les données seront perdues)';
+  document.getElementById('confirmBtn').onclick=()=>{
+    employees.forEach(e=>{e.missions=0;e.missionHistory=[];});
+    addLog('edit','Réinitialisation de tous les compteurs de missions.');
+    save();renderAll();closeModal('confirmModal');showToast('Compteurs réinitialisés.');
+  };
+  openModal('confirmModal');
+}
+
+// ══════════════════════════════════════════
+// LOGS
+// ══════════════════════════════════════════
+function addLog(type,text){
+  logs.push({type,text,time:new Date().toLocaleString('fr-FR')});
+  if(logs.length>300)logs=logs.slice(-300);
+}
+function clearLogs(){logs=[];save();renderLogs();showToast('Journal effacé.');}
+
+// ══════════════════════════════════════════
+// UI HELPERS
+// ══════════════════════════════════════════
+function showPage(id,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   document.querySelectorAll('.sidebar-link').forEach(l=>l.classList.remove('active'));
-  if(el) el.classList.add('active');
-  if(id==='service') renderService();
-  if(id==='dashboard') renderDashboard();
-  if(id==='logs') renderLogs();
+  if(el)el.classList.add('active');
+  if(id==='service')renderService();
+  if(id==='dashboard')renderDashboard();
+  if(id==='logs')renderLogs();
+  if(id==='salaires')renderSalaires();
+  if(id==='sanctions')renderSanctions();
+  if(id==='conges')renderConges();
 }
-
-function closeModal(id){ document.getElementById(id).classList.remove('open'); }
-
-function showToast(msg, type='ok'){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast' + (type==='error'?' error':'');
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function showToast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast'+(type==='error'?' error':type==='warn'?' warn':'');
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);
 }
-
-// Close modal on overlay click
-document.querySelectorAll('.modal-overlay').forEach(o=>{
-  o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); });
-});
+function today(){return new Date().toISOString().split('T')[0];}
+function fmtDur(mins){return mins<60?`${mins}min`:`${Math.floor(mins/60)}h${String(mins%60).padStart(2,'0')}`;}
 </script>
 </body>
 </html>
