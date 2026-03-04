@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>XPO — Gestion Interne</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+      --bg:#0d0d0b;
+      --surface:#141412;
+      --surface2:#1c1c19;
+      --surface3:#242420;
+      --border:#2a2a26;
+      --border2:#333330;
+      --text:#f0f0ec;
+      --text2:#8a8a82;
+      --text3:#555550;
+      --accent:#e8320a;
+      --accent-dim:rgba(232,50,10,0.15);
+      --accent-glow:rgba(232,50,10,0.08);
+      --green:#22c55e;
+      --green-dim:rgba(34,197,94,0.12);
+      --yellow:#f59e0b;
+      --yellow-dim:rgba(245,158,11,0.12);
+      --red:#ef4444;
+      --red-dim:rgba(239,68,68,0.12);
+      --blue:#3b82f6;
+      --blue-dim:rgba(59,130,246,0.12);
+    }
+    html{scroll-behavior:smooth;}
+    body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar{width:4px;}
+    ::-webkit-scrollbar-track{background:var(--bg);}
+    ::-webkit-scrollbar-thumb{background:var(--accent);}
+
+    /* LOCK SCREEN */
+    #lockScreen{
+      position:fixed;inset:0;z-index:1000;
+      background:var(--bg);
+      display:flex;align-items:center;justify-content:center;
+      flex-direction:column;gap:0;
+    }
+    .lock-logo{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:900;font-size:5rem;letter-spacing:0.08em;
+      color:var(--text);margin-bottom:8px;
+      animation:pulseIn 1s ease forwards;
+    }
+    .lock-logo span{color:var(--accent);}
+    .lock-sub{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:600;font-size:0.75rem;letter-spacing:0.28em;
+      text-transform:uppercase;color:var(--text3);
+      margin-bottom:52px;
+      animation:pulseIn 1s 0.2s ease both;
+    }
+    .lock-box{
+      background:var(--surface);
+      border:1px solid var(--border);
+      padding:40px 48px;
+      width:380px;
+      animation:pulseIn 1s 0.4s ease both;
+    }
+    .lock-title{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:700;font-size:0.72rem;letter-spacing:0.22em;
+      text-transform:uppercase;color:var(--text2);
+      margin-bottom:24px;
+      display:flex;align-items:center;gap:10px;
+    }
+    .lock-title::before{content:'';width:16px;height:2px;background:var(--accent);}
+    .lock-input-wrap{position:relative;margin-bottom:16px;}
+    .lock-input{
+      width:100%;background:var(--surface2);
+      border:1px solid var(--border);
+      color:var(--text);
+      font-family:'Barlow',sans-serif;font-size:1rem;
+      padding:14px 16px;
+      outline:none;transition:border-color 0.2s;
+      letter-spacing:0.1em;
+    }
+    .lock-input:focus{border-color:var(--accent);}
+    .lock-btn{
+      width:100%;
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:700;font-size:0.85rem;letter-spacing:0.16em;
+      text-transform:uppercase;
+      padding:14px;background:var(--accent);color:white;
+      border:none;cursor:pointer;
+      transition:background 0.2s,transform 0.15s;
+    }
+    .lock-btn:hover{background:#c42a08;transform:translateY(-1px);}
+    .lock-error{
+      font-size:0.8rem;color:var(--red);
+      margin-top:12px;text-align:center;
+      opacity:0;transition:opacity 0.3s;
+    }
+    .lock-error.show{opacity:1;}
+
+    /* MAIN APP */
+    #app{display:none;}
+
+    /* TOP BAR */
+    .topbar{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      height:60px;
+      background:var(--surface);
+      border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 28px;
+    }
+    .topbar-logo{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:900;font-size:1.5rem;letter-spacing:0.1em;
+      color:var(--text);
+    }
+    .topbar-logo span{color:var(--accent);}
+    .topbar-right{display:flex;align-items:center;gap:20px;}
+    .topbar-time{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:600;font-size:0.85rem;letter-spacing:0.1em;
+      color:var(--text2);
+    }
+    .topbar-user{
+      display:flex;align-items:center;gap:8px;
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:700;font-size:0.8rem;letter-spacing:0.14em;
+      text-transform:uppercase;color:var(--accent);
+    }
+    .online-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:blink 2s infinite;}
+    .logout-btn{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:600;font-size:0.72rem;letter-spacing:0.14em;
+      text-transform:uppercase;
+      padding:6px 14px;
+      background:transparent;color:var(--text3);
+      border:1px solid var(--border);cursor:pointer;
+      transition:color 0.2s,border-color 0.2s;
+    }
+    .logout-btn:hover{color:var(--red);border-color:var(--red);}
+
+    /* SIDEBAR */
+    .layout{display:flex;padding-top:60px;min-height:100vh;}
+    .sidebar{
+      width:220px;flex-shrink:0;
+      background:var(--surface);
+      border-right:1px solid var(--border);
+      padding:24px 0;
+      position:fixed;top:60px;bottom:0;
+      overflow-y:auto;
+    }
+    .sidebar-section{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:600;font-size:0.62rem;letter-spacing:0.24em;
+      text-transform:uppercase;color:var(--text3);
+      padding:0 20px;margin:20px 0 8px;
+    }
+    .sidebar-link{
+      display:flex;align-items:center;gap:12px;
+      padding:10px 20px;
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:600;font-size:0.85rem;letter-spacing:0.08em;
+      text-transform:uppercase;color:var(--text2);
+      cursor:pointer;transition:color 0.2s,background 0.2s;
+      border-left:2px solid transparent;
+    }
+    .sidebar-link:hover{color:var(--text);background:var(--surface2);}
+    .sidebar-link.active{color:var(--accent);border-left-color:var(--accent);background:var(--accent-dim);}
+    .sidebar-link svg{width:16px;height:16px;flex-shrink:0;}
+
+    /* MAIN */
+    .main{margin-left:220px;padding:32px;flex:1;}
+
+    /* PAGES */
+    .page{display:none;}
+    .page.active{display:block;}
+
+    /* PAGE HEADER */
+    .page-header{margin-bottom:32px;}
+    .page-label{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:600;font-size:0.7rem;letter-spacing:0.22em;
+      text-transform:uppercase;color:var(--accent);
+      margin-bottom:8px;
+      display:flex;align-items:center;gap:8px;
+    }
+    .page-label::before{content:'';width:16px;height:2px;background:var(--accent);}
+    .page-title{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:900;font-size:2.4rem;
+      text-transform:uppercase;letter-spacing:0.02em;
+      color:var(--text);
+    }
+
+    /* STAT CARDS */
+    .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px;}
+    .stat-card{
+      background:var(--surface);border:1px solid var(--border);
+      padding:22px 24px;
+      transition:border-color 0.2s;
+    }
+    .stat-card:hover{border-color:var(--border2);}
+    .stat-card-label{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:600;font-size:0.68rem;letter-spacing:0.18em;
+      text-transform:uppercase;color:var(--text3);margin-bottom:10px;
+    }
+    .stat-card-val{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:900;font-size:2.2rem;line-height:1;
+      color:var(--text);
+    }
+    .stat-card-val span{color:var(--accent);}
+    .stat-card-sub{font-size:0.75rem;color:var(--text3);margin-top:6px;}
+
+    /* TABLE */
+    .table-wrap{background:var(--surface);border:1px solid var(--border);overflow:hidden;}
+    .table-header{
+      padding:18px 24px;
+      border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .table-title{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:800;font-size:1rem;letter-spacing:0.08em;
+      text-transform:uppercase;color:var(--text);
+    }
+    .table-actions{display:flex;gap:10px;}
+    .btn{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:700;font-size:0.72rem;letter-spacing:0.14em;
+      text-transform:uppercase;
+      padding:8px 18px;cursor:pointer;
+      border:none;transition:background 0.2s,transform 0.15s;
+    }
+    .btn:hover{transform:translateY(-1px);}
+    .btn-red{background:var(--accent);color:white;}
+    .btn-red:hover{background:#c42a08;}
+    .btn-outline{background:transparent;color:var(--text2);border:1px solid var(--border);}
+    .btn-outline:hover{color:var(--text);border-color:var(--border2);}
+    .btn-green{background:var(--green);color:#000;}
+    .btn-green:hover{background:#16a34a;}
+
+    .search-input{
+      background:var(--surface2);border:1px solid var(--border);
+      color:var(--text);font-family:'Barlow',sans-serif;font-size:0.85rem;
+      padding:8px 14px;outline:none;width:220px;
+      transition:border-color 0.2s;
+    }
+    .search-input:focus{border-color:var(--accent);}
+    .search-input::placeholder{color:var(--text3);}
+
+    table{width:100%;border-collapse:collapse;}
+    thead tr{border-bottom:1px solid var(--border);}
+    th{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:600;font-size:0.65rem;letter-spacing:0.18em;
+      text-transform:uppercase;color:var(--text3);
+      padding:12px 24px;text-align:left;
+    }
+    tbody tr{border-bottom:1px solid var(--border);transition:background 0.15s;}
+    tbody tr:hover{background:var(--surface2);}
+    tbody tr:last-child{border-bottom:none;}
+    td{padding:14px 24px;font-size:0.88rem;color:var(--text2);}
+    td:first-child{color:var(--text);font-weight:500;}
+
+    /* BADGES */
+    .badge{
+      display:inline-block;
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:700;font-size:0.62rem;letter-spacing:0.14em;
+      text-transform:uppercase;
+      padding:4px 10px;
+      border-radius:2px;
+    }
+    .badge-online{background:var(--green-dim);color:var(--green);}
+    .badge-offline{background:var(--surface3);color:var(--text3);}
+    .badge-service{background:var(--accent-dim);color:var(--accent);}
+
+    /* GRADE BADGES */
+    .grade-0{background:rgba(100,100,100,0.15);color:#888;}
+    .grade-1{background:rgba(100,180,100,0.15);color:#6eb86e;}
+    .grade-2{background:rgba(100,150,220,0.15);color:#6ea8e0;}
+    .grade-3{background:rgba(220,180,80,0.15);color:#d4b04a;}
+    .grade-4{background:rgba(200,120,50,0.15);color:#c87832;}
+    .grade-5{background:rgba(180,80,180,0.15);color:#b464b4;}
+    .grade-6{background:rgba(80,180,200,0.15);color:#50b4c8;}
+    .grade-7{background:rgba(220,80,80,0.15);color:#dc5050;}
+    .grade-8{background:rgba(220,150,50,0.15);color:#dc9632;}
+    .grade-9{background:rgba(232,50,10,0.25);color:var(--accent);}
+
+    /* ACTION BTNS in table */
+    .action-btns{display:flex;gap:8px;}
+    .action-btn{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:700;font-size:0.62rem;letter-spacing:0.1em;
+      text-transform:uppercase;
+      padding:5px 10px;cursor:pointer;
+      border:1px solid var(--border);
+      background:transparent;color:var(--text2);
+      transition:all 0.2s;
+    }
+    .action-btn:hover{border-color:var(--accent);color:var(--accent);}
+    .action-btn.del:hover{border-color:var(--red);color:var(--red);}
+    .action-btn.promote:hover{border-color:var(--green);color:var(--green);}
+
+    /* MODAL */
+    .modal-overlay{
+      position:fixed;inset:0;z-index:500;
+      background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);
+      display:none;align-items:center;justify-content:center;
+    }
+    .modal-overlay.open{display:flex;}
+    .modal{
+      background:var(--surface);
+      border:1px solid var(--border);
+      padding:40px;width:520px;max-width:95vw;
+      animation:pulseIn 0.3s ease;
+    }
+    .modal-title{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:900;font-size:1.5rem;letter-spacing:0.05em;
+      text-transform:uppercase;color:var(--text);
+      margin-bottom:28px;
+      display:flex;align-items:center;gap:10px;
+    }
+    .modal-title::before{content:'';width:16px;height:2px;background:var(--accent);}
+    .form-row{margin-bottom:18px;}
+    .form-label{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:600;font-size:0.68rem;letter-spacing:0.18em;
+      text-transform:uppercase;color:var(--text3);
+      display:block;margin-bottom:8px;
+    }
+    .form-input,.form-select{
+      width:100%;background:var(--surface2);
+      border:1px solid var(--border);color:var(--text);
+      font-family:'Barlow',sans-serif;font-size:0.9rem;
+      padding:11px 14px;outline:none;
+      transition:border-color 0.2s;
+    }
+    .form-input:focus,.form-select:focus{border-color:var(--accent);}
+    .form-select option{background:var(--surface2);}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .modal-actions{display:flex;gap:10px;margin-top:28px;justify-content:flex-end;}
+
+    /* SERVICE PAGE */
+    .service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;}
+    .service-info-card{
+      background:var(--surface);border:1px solid var(--border);
+      padding:24px;
+    }
+    .sic-label{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:600;font-size:0.65rem;letter-spacing:0.2em;
+      text-transform:uppercase;color:var(--text3);margin-bottom:10px;
+    }
+    .sic-val{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:900;font-size:1.6rem;color:var(--text);
+    }
+    .sic-val.active{color:var(--green);}
+
+    .service-form{
+      background:var(--surface);border:1px solid var(--border);
+      padding:32px;margin-bottom:24px;
+    }
+    .service-form-title{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:800;font-size:1.1rem;letter-spacing:0.08em;
+      text-transform:uppercase;color:var(--text);
+      margin-bottom:24px;
+      display:flex;align-items:center;gap:10px;
+    }
+    .service-form-title::before{content:'';width:14px;height:2px;background:var(--accent);}
+
+    /* HIERARCHY PAGE */
+    .hierarchy{display:flex;flex-direction:column;gap:4px;}
+    .hier-row{
+      display:flex;align-items:center;
+      background:var(--surface);border:1px solid var(--border);
+      padding:16px 24px;gap:20px;
+      transition:border-color 0.2s;
+    }
+    .hier-row:hover{border-color:var(--border2);}
+    .hier-rank{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:900;font-size:1.6rem;
+      color:var(--text3);width:40px;text-align:center;flex-shrink:0;
+    }
+    .hier-info{flex:1;}
+    .hier-name{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:800;font-size:1rem;text-transform:uppercase;
+      letter-spacing:0.06em;color:var(--text);margin-bottom:4px;
+    }
+    .hier-desc{font-size:0.8rem;color:var(--text3);}
+    .hier-perms{display:flex;gap:6px;flex-wrap:wrap;}
+    .perm-tag{
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:600;font-size:0.6rem;letter-spacing:0.12em;
+      text-transform:uppercase;padding:3px 8px;
+      background:var(--surface2);color:var(--text3);border:1px solid var(--border);
+    }
+    .perm-tag.yes{background:var(--green-dim);color:var(--green);border-color:rgba(34,197,94,0.2);}
+
+    /* LOG PAGE */
+    .log-entry{
+      display:flex;align-items:flex-start;gap:16px;
+      padding:16px 24px;background:var(--surface);border-bottom:1px solid var(--border);
+    }
+    .log-dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0;}
+    .log-dot.in{background:var(--green);}
+    .log-dot.out{background:var(--red);}
+    .log-dot.edit{background:var(--yellow);}
+    .log-dot.add{background:var(--blue);}
+    .log-main{flex:1;}
+    .log-text{font-size:0.87rem;color:var(--text);}
+    .log-text strong{color:var(--accent);}
+    .log-time{font-size:0.75rem;color:var(--text3);margin-top:3px;}
+
+    /* ANIMATIONS */
+    @keyframes pulseIn{
+      from{opacity:0;transform:translateY(16px);}
+      to{opacity:1;transform:none;}
+    }
+    @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+    /* TOAST */
+    .toast{
+      position:fixed;bottom:28px;right:28px;z-index:2000;
+      background:var(--surface);border:1px solid var(--border);
+      border-left:3px solid var(--green);
+      padding:14px 20px;
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:600;font-size:0.85rem;letter-spacing:0.06em;
+      text-transform:uppercase;color:var(--text);
+      transform:translateX(120%);transition:transform 0.4s ease;
+    }
+    .toast.show{transform:translateX(0);}
+    .toast.error{border-left-color:var(--red);}
+
+    /* EMPTY STATE */
+    .empty{
+      text-align:center;padding:60px;color:var(--text3);
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:1rem;letter-spacing:0.1em;text-transform:uppercase;
+    }
+
+    /* CONFIRM */
+    .confirm-modal .modal{width:400px;text-align:center;}
+    .confirm-modal .modal-title{justify-content:center;}
+    .confirm-modal .modal-title::before{display:none;}
+    .confirm-text{color:var(--text2);font-size:0.9rem;margin-bottom:24px;line-height:1.6;}
+  </style>
+</head>
+<body>
+
+<!-- LOCK SCREEN -->
+<div id="lockScreen">
+  <div class="lock-logo">X<span>P</span>O</div>
+  <div class="lock-sub">Système de gestion interne</div>
+  <div class="lock-box">
+    <div class="lock-title">Accès sécurisé</div>
+    <div class="lock-input-wrap">
+      <input type="password" class="lock-input" id="passwordInput" placeholder="Mot de passe..." onkeydown="if(event.key==='Enter')tryLogin()"/>
+    </div>
+    <button class="lock-btn" onclick="tryLogin()">Accéder au panneau</button>
+    <div class="lock-error" id="lockError">Mot de passe incorrect.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-logo">X<span>P</span>O <span style="font-size:0.8rem;font-weight:400;color:var(--text3);letter-spacing:0.1em;"> — GESTION INTERNE</span></div>
+    <div class="topbar-right">
+      <div class="topbar-time" id="clock"></div>
+      <div class="topbar-user"><div class="online-dot"></div> PDG / CEO</div>
+      <button class="logout-btn" onclick="logout()">Déconnexion</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-section">Principal</div>
+      <div class="sidebar-link active" onclick="showPage('dashboard',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Tableau de bord
+      </div>
+      <div class="sidebar-link" onclick="showPage('employees',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Employés
+      </div>
+      <div class="sidebar-link" onclick="showPage('service',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Prise de service
+      </div>
+      <div class="sidebar-section">Organisation</div>
+      <div class="sidebar-link" onclick="showPage('hierarchy',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7H22l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        Grades & Hiérarchie
+      </div>
+      <div class="sidebar-link" onclick="showPage('logs',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Journal d'activité
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <div class="page-label">Vue générale</div>
+          <div class="page-title">Tableau de bord</div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-card-label">Employés total</div>
+            <div class="stat-card-val" id="stat-total">0</div>
+            <div class="stat-card-sub">Membres enregistrés</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">En service</div>
+            <div class="stat-card-val" id="stat-online" style="color:var(--green)">0</div>
+            <div class="stat-card-sub">Actuellement actifs</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Missions aujourd'hui</div>
+            <div class="stat-card-val" id="stat-missions">0</div>
+            <div class="stat-card-sub">Total cumulé</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Taux de présence</div>
+            <div class="stat-card-val" id="stat-rate">0<span>%</span></div>
+            <div class="stat-card-sub">Employés en service</div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <div class="table-header">
+            <div class="table-title">Employés en service</div>
+          </div>
+          <table>
+            <thead><tr>
+              <th>Nom</th><th>Grade</th><th>Véhicule</th><th>Zone</th><th>Missions</th><th>Heure début</th>
+            </tr></thead>
+            <tbody id="dashServiceList"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- EMPLOYEES -->
+      <div class="page" id="page-employees">
+        <div class="page-header">
+          <div class="page-label">Ressources humaines</div>
+          <div class="page-title">Gestion des employés</div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-header">
+            <div class="table-title">Liste du personnel</div>
+            <div class="table-actions">
+              <input type="text" class="search-input" placeholder="Rechercher..." oninput="filterEmployees(this.value)"/>
+              <button class="btn btn-red" onclick="openAddModal()">+ Ajouter</button>
+            </div>
+          </div>
+          <table>
+            <thead><tr>
+              <th>Nom</th><th>Grade</th><th>Statut</th><th>Missions</th><th>Embauché le</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="employeeList"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SERVICE -->
+      <div class="page" id="page-service">
+        <div class="page-header">
+          <div class="page-label">Opérations</div>
+          <div class="page-title">Prise de service</div>
+        </div>
+        <div class="service-grid">
+          <div class="service-info-card">
+            <div class="sic-label">En service actuellement</div>
+            <div class="sic-val active" id="svc-count">0</div>
+          </div>
+          <div class="service-info-card">
+            <div class="sic-label">Missions du jour</div>
+            <div class="sic-val" id="svc-missions">0</div>
+          </div>
+          <div class="service-info-card">
+            <div class="sic-label">Heure système</div>
+            <div class="sic-val" id="svc-clock">--:--</div>
+          </div>
+        </div>
+
+        <div class="service-form">
+          <div class="service-form-title">Enregistrer une prise de service</div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label class="form-label">Employé</label>
+              <select class="form-select" id="svcEmployee"></select>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Véhicule assigné</label>
+              <input type="text" class="form-input" id="svcVehicle" placeholder="Ex: Freighter, Mule..."/>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Zone de travail</label>
+              <input type="text" class="form-input" id="svcZone" placeholder="Ex: Port, Autoroute N1..."/>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Nombre de missions</label>
+              <input type="number" class="form-input" id="svcMissions" placeholder="0" min="0"/>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:8px;">
+            <button class="btn btn-green" onclick="takeService()">✓ Prise de service</button>
+            <button class="btn btn-outline" onclick="endService()">✕ Fin de service</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <div class="table-header">
+            <div class="table-title">Employés en service</div>
+          </div>
+          <table>
+            <thead><tr>
+              <th>Employé</th><th>Grade</th><th>Véhicule</th><th>Zone</th><th>Missions</th><th>Début</th><th>Durée</th>
+            </tr></thead>
+            <tbody id="serviceList"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- HIERARCHY -->
+      <div class="page" id="page-hierarchy">
+        <div class="page-header">
+          <div class="page-label">Structure</div>
+          <div class="page-title">Grades & Hiérarchie</div>
+        </div>
+        <div class="hierarchy" id="hierarchyList"></div>
+      </div>
+
+      <!-- LOGS -->
+      <div class="page" id="page-logs">
+        <div class="page-header">
+          <div class="page-label">Traçabilité</div>
+          <div class="page-title">Journal d'activité</div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-header">
+            <div class="table-title">Historique</div>
+            <button class="btn btn-outline" onclick="clearLogs()">Effacer</button>
+          </div>
+          <div id="logList"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ADD/EDIT MODAL -->
+<div class="modal-overlay" id="employeeModal">
+  <div class="modal">
+    <div class="modal-title" id="modalTitle">Ajouter un employé</div>
+    <div class="form-grid">
+      <div class="form-row">
+        <label class="form-label">Prénom & Nom</label>
+        <input type="text" class="form-input" id="empName" placeholder="Jean Dupont"/>
+      </div>
+      <div class="form-row">
+        <label class="form-label">ID / Pseudo FiveM</label>
+        <input type="text" class="form-input" id="empId" placeholder="XPO-001"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Grade</label>
+      <select class="form-select" id="empGrade"></select>
+    </div>
+    <div class="form-grid">
+      <div class="form-row">
+        <label class="form-label">Date d'embauche</label>
+        <input type="date" class="form-input" id="empDate"/>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Note interne</label>
+        <input type="text" class="form-input" id="empNote" placeholder="Optionnel..."/>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('employeeModal')">Annuler</button>
+      <button class="btn btn-red" onclick="saveEmployee()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay confirm-modal" id="confirmModal">
+  <div class="modal">
+    <div class="modal-title">Confirmer</div>
+    <div class="confirm-text" id="confirmText"></div>
+    <div class="modal-actions" style="justify-content:center;">
+      <button class="btn btn-outline" onclick="closeModal('confirmModal')">Annuler</button>
+      <button class="btn btn-red" id="confirmBtn">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── CONFIG ───────────────────────────────────────
+const PASSWORD = 'xpo2025'; // Change ici ton mot de passe
+
+const GRADES = [
+  { id:0, name:'Chauffeur en probation',   color:'grade-0', desc:'Période d\'essai. Accès limité, missions simples uniquement.', perms:{service:true,  manage:false, recruit:false, promote:false, direction:false} },
+  { id:1, name:'Mécanicien XPO',           color:'grade-1', desc:'Spécialiste technique, entretien et réparation de la flotte.', perms:{service:true,  manage:false, recruit:false, promote:false, direction:false} },
+  { id:2, name:'Chauffeur Junior',          color:'grade-2', desc:'Chauffeur validé, missions standards autorisées.', perms:{service:true,  manage:false, recruit:false, promote:false, direction:false} },
+  { id:3, name:'Chauffeur Confirmé',        color:'grade-3', desc:'Chauffeur expérimenté, missions longue distance.', perms:{service:true,  manage:false, recruit:false, promote:false, direction:false} },
+  { id:4, name:'Responsable Technique',     color:'grade-4', desc:'Supervise la flotte et les opérations terrain.', perms:{service:true,  manage:true,  recruit:false, promote:false, direction:false} },
+  { id:5, name:'Responsable Recrutement',   color:'grade-5', desc:'Gère les candidatures et l\'intégration des nouveaux.', perms:{service:true,  manage:true,  recruit:true,  promote:false, direction:false} },
+  { id:6, name:'Régulateur de Flux',        color:'grade-6', desc:'Coordonne les missions et optimise les itinéraires.', perms:{service:true,  manage:true,  recruit:true,  promote:false, direction:false} },
+  { id:7, name:'Direction RH',              color:'grade-7', desc:'Gestion complète du personnel et des grades.', perms:{service:true,  manage:true,  recruit:true,  promote:true,  direction:false} },
+  { id:8, name:'Directeur d\'Exploitation', color:'grade-8', desc:'Dirige les opérations globales de l\'entreprise.', perms:{service:true,  manage:true,  recruit:true,  promote:true,  direction:true} },
+  { id:9, name:'PDG / CEO',                 color:'grade-9', desc:'Autorité suprême. Accès total à tous les systèmes.', perms:{service:true,  manage:true,  recruit:true,  promote:true,  direction:true} },
+];
+
+// ─── STATE ────────────────────────────────────────
+let employees = JSON.parse(localStorage.getItem('xpo_employees')||'[]');
+let services  = JSON.parse(localStorage.getItem('xpo_services')||'[]');
+let logs      = JSON.parse(localStorage.getItem('xpo_logs')||'[]');
+let editingId = null;
+
+// ─── SAVE ─────────────────────────────────────────
+function save(){
+  localStorage.setItem('xpo_employees', JSON.stringify(employees));
+  localStorage.setItem('xpo_services',  JSON.stringify(services));
+  localStorage.setItem('xpo_logs',      JSON.stringify(logs));
+}
+
+// ─── AUTH ─────────────────────────────────────────
+function tryLogin(){
+  const val = document.getElementById('passwordInput').value;
+  if(val === PASSWORD){
+    document.getElementById('lockScreen').style.display='none';
+    document.getElementById('app').style.display='block';
+    init();
+  } else {
+    const err = document.getElementById('lockError');
+    err.classList.add('show');
+    setTimeout(()=>err.classList.remove('show'),3000);
+  }
+}
+function logout(){
+  document.getElementById('lockScreen').style.display='flex';
+  document.getElementById('app').style.display='none';
+  document.getElementById('passwordInput').value='';
+}
+
+// ─── INIT ─────────────────────────────────────────
+function init(){
+  buildGradeOptions();
+  buildHierarchy();
+  renderAll();
+  clock();
+  setInterval(clock,1000);
+  setInterval(updateDurations,30000);
+}
+
+function clock(){
+  const now = new Date();
+  const t = now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('clock').textContent = t;
+  const sc = document.getElementById('svc-clock');
+  if(sc) sc.textContent = t;
+}
+
+function buildGradeOptions(){
+  ['empGrade','svcEmployee'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    if(id==='empGrade'){
+      el.innerHTML = GRADES.map(g=>`<option value="${g.id}">${g.name}</option>`).join('');
+    } else {
+      el.innerHTML = '<option value="">Sélectionner un employé...</option>' +
+        employees.map(e=>`<option value="${e.uid}">${e.name} — ${GRADES[e.grade].name}</option>`).join('');
+    }
+  });
+}
+
+function buildHierarchy(){
+  const list = document.getElementById('hierarchyList');
+  list.innerHTML = [...GRADES].reverse().map((g,ri)=>{
+    const rank = GRADES.length - ri;
+    const perms = Object.entries(g.perms).map(([k,v])=>`<span class="perm-tag ${v?'yes':''}">${{service:'Service',manage:'Gestion',recruit:'Recrutement',promote:'Promotion',direction:'Direction'}[k]}</span>`).join('');
+    return `<div class="hier-row">
+      <div class="hier-rank">${rank}</div>
+      <div class="hier-info">
+        <div class="hier-name"><span class="badge ${g.color}">${g.name}</span></div>
+        <div class="hier-desc">${g.desc}</div>
+      </div>
+      <div class="hier-perms">${perms}</div>
+    </div>`;
+  }).join('');
+}
+
+// ─── RENDER ───────────────────────────────────────
+function renderAll(){
+  renderEmployees();
+  renderService();
+  renderDashboard();
+  renderLogs();
+  buildGradeOptions();
+}
+
+function renderEmployees(filter=''){
+  const tbody = document.getElementById('employeeList');
+  const filtered = employees.filter(e=>
+    e.name.toLowerCase().includes(filter.toLowerCase()) ||
+    e.fivemId.toLowerCase().includes(filter.toLowerCase())
+  );
+  if(!filtered.length){ tbody.innerHTML=`<tr><td colspan="6"><div class="empty">Aucun employé enregistré</div></td></tr>`; return; }
+  tbody.innerHTML = filtered.map(e=>{
+    const g = GRADES[e.grade];
+    const inSvc = services.find(s=>s.uid===e.uid);
+    const status = inSvc
+      ? `<span class="badge badge-service">En service</span>`
+      : `<span class="badge badge-offline">Hors service</span>`;
+    return `<tr>
+      <td><strong>${e.name}</strong><br><span style="color:var(--text3);font-size:0.75rem;">${e.fivemId}</span></td>
+      <td><span class="badge ${g.color}">${g.name}</span></td>
+      <td>${status}</td>
+      <td>${e.missions||0}</td>
+      <td>${e.hired}</td>
+      <td><div class="action-btns">
+        <button class="action-btn" onclick="openEditModal('${e.uid}')">Éditer</button>
+        <button class="action-btn promote" onclick="promoteEmployee('${e.uid}',1)">▲</button>
+        <button class="action-btn promote" style="color:var(--text3)" onclick="promoteEmployee('${e.uid}',-1)">▼</button>
+        <button class="action-btn del" onclick="confirmDelete('${e.uid}')">Retirer</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderService(){
+  const tbody = document.getElementById('serviceList');
+  const count = document.getElementById('svc-count');
+  const mcount = document.getElementById('svc-missions');
+  if(count) count.textContent = services.length;
+  const totalM = services.reduce((a,s)=>a+(parseInt(s.missions)||0),0);
+  if(mcount) mcount.textContent = totalM;
+  if(!services.length){ tbody.innerHTML=`<tr><td colspan="7"><div class="empty">Aucun employé en service</div></td></tr>`; return; }
+  const now = Date.now();
+  tbody.innerHTML = services.map(s=>{
+    const emp = employees.find(e=>e.uid===s.uid);
+    const g = emp ? GRADES[emp.grade] : {name:'Inconnu',color:''};
+    const mins = Math.floor((now - s.startTs)/60000);
+    const dur = mins<60 ? `${mins}min` : `${Math.floor(mins/60)}h${String(mins%60).padStart(2,'0')}`;
+    return `<tr>
+      <td>${emp?emp.name:'Inconnu'}</td>
+      <td><span class="badge ${g.color}">${g.name}</span></td>
+      <td>${s.vehicle||'—'}</td>
+      <td>${s.zone||'—'}</td>
+      <td>${s.missions||0}</td>
+      <td>${s.startTime}</td>
+      <td><span class="badge badge-service">${dur}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderDashboard(){
+  document.getElementById('stat-total').textContent = employees.length;
+  document.getElementById('stat-online').textContent = services.length;
+  const totalM = employees.reduce((a,e)=>a+(e.missions||0),0);
+  document.getElementById('stat-missions').textContent = totalM;
+  const rate = employees.length ? Math.round(services.length/employees.length*100) : 0;
+  document.getElementById('stat-rate').innerHTML = `${rate}<span>%</span>`;
+
+  const tbody = document.getElementById('dashServiceList');
+  if(!services.length){ tbody.innerHTML=`<tr><td colspan="6"><div class="empty">Aucun employé en service</div></td></tr>`; return; }
+  tbody.innerHTML = services.map(s=>{
+    const emp = employees.find(e=>e.uid===s.uid);
+    const g = emp ? GRADES[emp.grade] : {name:'Inconnu',color:''};
+    return `<tr>
+      <td>${emp?emp.name:'?'}</td>
+      <td><span class="badge ${g.color}">${g.name}</span></td>
+      <td>${s.vehicle||'—'}</td>
+      <td>${s.zone||'—'}</td>
+      <td>${s.missions||0}</td>
+      <td>${s.startTime}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderLogs(){
+  const el = document.getElementById('logList');
+  if(!logs.length){ el.innerHTML=`<div class="empty">Aucune activité enregistrée</div>`; return; }
+  el.innerHTML = [...logs].reverse().map(l=>`
+    <div class="log-entry">
+      <div class="log-dot ${l.type}"></div>
+      <div class="log-main">
+        <div class="log-text">${l.text}</div>
+        <div class="log-time">${l.time}</div>
+      </div>
+    </div>`).join('');
+}
+
+function updateDurations(){ renderService(); }
+
+// ─── EMPLOYEES CRUD ───────────────────────────────
+function openAddModal(){
+  editingId=null;
+  document.getElementById('modalTitle').textContent='Ajouter un employé';
+  document.getElementById('empName').value='';
+  document.getElementById('empId').value='';
+  document.getElementById('empGrade').value=0;
+  document.getElementById('empDate').value=new Date().toISOString().split('T')[0];
+  document.getElementById('empNote').value='';
+  document.getElementById('employeeModal').classList.add('open');
+}
+
+function openEditModal(uid){
+  editingId=uid;
+  const e = employees.find(e=>e.uid===uid);
+  document.getElementById('modalTitle').textContent='Modifier l\'employé';
+  document.getElementById('empName').value=e.name;
+  document.getElementById('empId').value=e.fivemId;
+  document.getElementById('empGrade').value=e.grade;
+  document.getElementById('empDate').value=e.hired;
+  document.getElementById('empNote').value=e.note||'';
+  document.getElementById('employeeModal').classList.add('open');
+}
+
+function saveEmployee(){
+  const name = document.getElementById('empName').value.trim();
+  const fivemId = document.getElementById('empId').value.trim();
+  const grade = parseInt(document.getElementById('empGrade').value);
+  const hired = document.getElementById('empDate').value;
+  const note = document.getElementById('empNote').value.trim();
+  if(!name||!fivemId){ showToast('Remplis tous les champs obligatoires.','error'); return; }
+
+  if(editingId){
+    const idx = employees.findIndex(e=>e.uid===editingId);
+    const old = employees[idx];
+    employees[idx] = {...old, name, fivemId, grade, hired, note};
+    addLog('edit', `<strong>${name}</strong> modifié — Grade: ${GRADES[grade].name}`);
+    showToast('Employé mis à jour.');
+  } else {
+    const uid = 'emp_'+Date.now();
+    employees.push({uid,name,fivemId,grade,hired,note,missions:0});
+    addLog('add', `<strong>${name}</strong> ajouté — ${GRADES[grade].name}`);
+    showToast('Employé ajouté avec succès.');
+  }
+  save(); renderAll();
+  closeModal('employeeModal');
+}
+
+function promoteEmployee(uid,dir){
+  const idx = employees.findIndex(e=>e.uid===uid);
+  const e = employees[idx];
+  const ng = Math.max(0,Math.min(9,e.grade+dir));
+  if(ng===e.grade) return;
+  employees[idx].grade=ng;
+  addLog(dir>0?'add':'edit',`<strong>${e.name}</strong> ${dir>0?'promu':'rétrogradé'} → ${GRADES[ng].name}`);
+  save(); renderAll();
+  showToast(dir>0?'Employé promu.':'Employé rétrogradé.');
+}
+
+function confirmDelete(uid){
+  const e = employees.find(e=>e.uid===uid);
+  document.getElementById('confirmText').textContent=`Voulez-vous vraiment retirer ${e.name} de l'équipe XPO ?`;
+  document.getElementById('confirmBtn').onclick=()=>deleteEmployee(uid);
+  document.getElementById('confirmModal').classList.add('open');
+}
+
+function deleteEmployee(uid){
+  const e = employees.find(e=>e.uid===uid);
+  employees = employees.filter(e=>e.uid!==uid);
+  services = services.filter(s=>s.uid!==uid);
+  addLog('out',`<strong>${e.name}</strong> retiré de l'équipe.`);
+  save(); renderAll();
+  closeModal('confirmModal');
+  showToast('Employé retiré.');
+}
+
+function filterEmployees(val){ renderEmployees(val); }
+
+// ─── SERVICE ──────────────────────────────────────
+function takeService(){
+  const uid = document.getElementById('svcEmployee').value;
+  const vehicle = document.getElementById('svcVehicle').value.trim();
+  const zone = document.getElementById('svcZone').value.trim();
+  const missions = parseInt(document.getElementById('svcMissions').value)||0;
+  if(!uid){ showToast('Sélectionne un employé.','error'); return; }
+  if(services.find(s=>s.uid===uid)){ showToast('Cet employé est déjà en service.','error'); return; }
+  const emp = employees.find(e=>e.uid===uid);
+  const now = new Date();
+  services.push({uid, vehicle, zone, missions, startTime: now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}), startTs: now.getTime()});
+  emp.missions = (emp.missions||0) + missions;
+  addLog('in',`<strong>${emp.name}</strong> a pris le service — Véhicule: ${vehicle||'—'} | Zone: ${zone||'—'} | Missions: ${missions}`);
+  save(); renderAll();
+  document.getElementById('svcVehicle').value='';
+  document.getElementById('svcZone').value='';
+  document.getElementById('svcMissions').value='';
+  showToast(`${emp.name} est maintenant en service.`);
+}
+
+function endService(){
+  const uid = document.getElementById('svcEmployee').value;
+  if(!uid){ showToast('Sélectionne un employé.','error'); return; }
+  const svc = services.find(s=>s.uid===uid);
+  if(!svc){ showToast('Cet employé n\'est pas en service.','error'); return; }
+  const emp = employees.find(e=>e.uid===uid);
+  const mins = Math.floor((Date.now()-svc.startTs)/60000);
+  const dur = mins<60?`${mins}min`:`${Math.floor(mins/60)}h${String(mins%60).padStart(2,'0')}`;
+  services = services.filter(s=>s.uid!==uid);
+  addLog('out',`<strong>${emp.name}</strong> a terminé son service — Durée: ${dur}`);
+  save(); renderAll();
+  showToast(`${emp.name} a terminé son service (${dur}).`);
+}
+
+// ─── LOGS ─────────────────────────────────────────
+function addLog(type, text){
+  logs.push({type, text, time: new Date().toLocaleString('fr-FR')});
+  if(logs.length>200) logs = logs.slice(-200);
+}
+function clearLogs(){ logs=[]; save(); renderLogs(); showToast('Journal effacé.'); }
+
+// ─── UI HELPERS ───────────────────────────────────
+function showPage(id, el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.sidebar-link').forEach(l=>l.classList.remove('active'));
+  if(el) el.classList.add('active');
+  if(id==='service') renderService();
+  if(id==='dashboard') renderDashboard();
+  if(id==='logs') renderLogs();
+}
+
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+function showToast(msg, type='ok'){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (type==='error'?' error':'');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); });
+});
+</script>
+</body>
+</html>
